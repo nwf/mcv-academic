@@ -1,0 +1,51 @@
+\ProvidesFile{position.dbx}
+
+% Position data model
+\DeclareDatamodelEntrytypes{position}
+
+\DeclareDatamodelFields[type=field, datatype=literal]{
+  organization,%
+  title,%
+  country,%
+  description,%
+  %
+  organization-es,%
+  title-es,%
+  country-es,%
+  description-es,%
+  %
+  organization-en,%
+  title-en,%
+  country-en,%
+  description-en%
+}
+
+\DeclareDatamodelFields[type=field, datatype=datepart]{
+  year,%
+  endyear,%
+  month,%
+  endmonth%
+}
+
+
+\DeclareDatamodelFields[type=field,datatype=date]{
+  date%
+}
+
+\DeclareDatamodelEntryfields[position]{%
+  date,%
+  organization,%
+  title,%
+  country,%
+  description,%
+  %
+  organization-es,%
+  title-es,%
+  country-es,%
+  description-es,%
+  %
+  organization-en,%
+  title-en,%
+  country-en,%
+  description-en%
+}

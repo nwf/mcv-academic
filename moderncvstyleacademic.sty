@@ -1,0 +1,278 @@
+%% start of file `moderncvstyleacademic.sty'.
+
+
+%-------------------------------------------------------------------------------
+%                identification
+%-------------------------------------------------------------------------------
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{moderncvstyleacademic}[2016/08/28 v1.0.0 modern curriculum vitae and letter style scheme: academic]
+
+% head section alignment options: "left" (default) or "right"
+\@initializecommand{\moderncvstyleheadoptions}{}
+\DeclareOption{left} {\edef\moderncvstyleheadoptions{\moderncvstyleheadoptions,left}}
+\DeclareOption{right}{\edef\moderncvstyleheadoptions{\moderncvstyleheadoptions,right}}
+
+\DeclareOption*{}% avoid choking on unknown options
+\ExecuteOptions{left}
+\ProcessOptions*\relax% \ProcessOptions* processes the options in the order provided (i.e., with the later ones possibly overriding the former ones), while \ProcessOptions processes them in the order of the package
+
+%-------------------------------------------------------------------------------
+%                fonts & icons
+%-------------------------------------------------------------------------------
+% Latin Modern fonts
+%\ifxetexorluatex
+%  \setmainfont{Latin Modern Roman}
+%  \setsansfont{Latin Modern Sans}
+%  \setmathfont{Latin Modern Math}
+%\else
+  \IfFileExists{lmodern.sty}%
+    {\RequirePackage{lmodern}}%
+    {}
+%\fi
+
+% symbols
+\moderncvicons{fa-academic}
+
+
+%-------------------------------------------------------------------------------
+%                header, body & footer
+%-------------------------------------------------------------------------------
+\moderncvhead[\moderncvstyleheadoptions]{42}
+\moderncvbody{42}
+
+
+%-------------------------------------------------------------------------------
+% Definitions
+%-------------------------------------------------------------------------------
+
+%switches for information
+\newif\ifdetails\detailsfalse
+\RequirePackage{etoolbox}
+\RequirePackage{enumitem}
+% adjust the page margins
+\RequirePackage[margin=2cm]{geometry}
+\RequirePackage{url}
+
+%-------------------------------------------------------------------------------
+% Patch the rest of moderncv
+%-------------------------------------------------------------------------------
+
+% fix identation for letters
+\setlength{\parindent}{10\p@}
+
+
+% patch \cventry
+% http://tex.stackexchange.com/a/247329/7561
+\renewcommand*{\cventry}[7][.25em]{%
+  \cvitem[#1]{#2}{%
+    {\bfseries#3}%
+    \ifthenelse{\equal{#4}{}}{}{, {\slshape#4}}%
+    \ifthenelse{\equal{#5}{}}{}{, #5}%
+    \ifthenelse{\equal{#6}{}}{}{, #6}%
+    .\strut%
+    \ifdetails%
+    \ifblank{#7}{}{\newline{}\begin{minipage}[t]{\linewidth}\small#7\end{minipage}}%
+    \fi%
+  }
+}
+
+
+% use for special titles
+\newcommand{\makespecialtitle}[1]{\title{#1}\makecvtitle}
+% use for emails in the body, 
+\newcommand{\mail}[1]{\ttfamily\href{mailto:#1}{#1}}
+
+\RenewDocumentCommand{\social}{O{}O{}m}{%
+  \ifthenelse{\equal{#2}{}}%
+  {%
+    \ifthenelse{\equal{#1}{linkedin}}{\collectionadd[linkedin]{socials}{\protect\httplink[#3]{www.linkedin.com/in/#3}}}{}%
+    \ifthenelse{\equal{#1}{twitter}} {\collectionadd[twitter]{socials} {\protect\httplink[#3]{www.twitter.com/#3}}}    {}%
+    \ifthenelse{\equal{#1}{github}}  {\collectionadd[github]{socials}  {\protect\httplink[#3]{www.github.com/#3}}}     {}%
+    \ifthenelse{\equal{#1}{scholar}} {\collectionadd[scholar]{socials} {\protect\httplink[Google Scholar]{http://scholar.google.com/citations?user=#3}}} {}%
+  }
+  {\collectionadd[#1]{socials}{\protect\httplink[#3]{#2}}}}
+
+
+%-------------------------------------------------------------------------------
+% Multilanguage support
+%-------------------------------------------------------------------------------
+\RequirePackage{pgfkeys}
+% http://tex.stackexchange.com/a/42791/7561
+\newcommand{\newlcommand}[1]{%
+  \newcommand#1{%
+  	\@ifundefined{\string#1\languagename}
+  	{``No def of \texttt{\string#1} for \languagename''}
+  	{\@nameuse{\string#1\languagename}}%
+  }%
+}
+\newcommand{\addtolanguagecommand}[3]{%
+  \@namedef{\string#1#2}{#3}}
+
+\pgfkeys{
+  /mlcommands/.is family, /mlcommands,
+  command/.code={\def\langcmd{#1}},
+  .unknown/.code = {%    
+    \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\addtolanguagecommand\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+    {\expandafter\expandafter\expandafter\langcmd\expandafter\expandafter\expandafter}%
+    \expandafter\expandafter\expandafter{\expandafter\pgfkeyscurrentname\expandafter}\expandafter
+    {#1}
+  }%
+}
+
+\newcommand{\newmlcommand}[2][]{%
+  \newlcommand#2%
+  \pgfkeys{/mlcommands, command=#2, #1}%
+}
+
+% How to use
+%\newlanguagecommand{\uno}
+%\addtolanguagecommand{\uno}{english}{one}
+%\addtolanguagecommand{\uno}{french}{une}
+% or
+% \newmlcommand[english=one, french=une]{\uno}
+
+% Create long names for languages, this reuses the code from cv.bbx
+% fixme: merge both definitions (here and cv.bbx)
+\pgfkeys{
+  /shortlan/.is family, /shortlan,
+  .unknown/.code = {
+%    \expandafter\edef\csname @cv@short@#1\endcsname{\pgfkeyscurrentname}
+    \expandafter\expandafter\expandafter\edef\expandafter\csname @cv@long@\pgfkeyscurrentname\endcsname{#1}
+  }
+}
+% handler to create the keys
+\def\babelshortnames#1{\pgfkeys{/shortlan, #1}}
+% directly obtain the short name
+%\def\shortlanguagename{\csname @cv@short@\languagename\endcsname}
+\newcommand{\longlanguagename}[1]{\csname @cv@long@#1\endcsname}
+
+% declare default languages
+\babelshortnames{en=english, es=spanish}
+
+%-------------------------------------------------------------------------------
+% Academic drivers and sorting to use with this style
+%-------------------------------------------------------------------------------
+
+\RequirePackage[tools={study, position, course, thesis, project, cvmisc}, bibstyle=numeric-comp]{biblatex-multiple-dm}
+% bibliography with mutiple entries
+\RequirePackage[backend=biber, citestyle=numeric-comp, bibstyle=multiple-dm, sorting=ymdtn, maxbibnames=99, defernumbers=true, firstinits=true, sortcites]{biblatex}
+
+% Patch endyears that are not declared
+\DeclareSourcemap{
+  \maps[datatype=bibtex]{
+    \map{
+      \step[fieldsource=year]
+      \step[fieldset=endyear, origfieldval]
+    }
+  }
+}
+
+% Custom sort to include month and endyear
+\DeclareSortingScheme{ymdtn}{
+  \sort{
+    \field{presort}
+  }
+  \sort[final]{
+    \field{sortkey}
+  }
+  \sort[direction=descending]{
+    \field{sortyear}
+    \field{endyear}
+    \literal{9999}
+  }
+  \sort[direction=descending]{
+    \field{sortyear}
+%    \field{endyear}
+    \field{year}
+    \literal{9999}
+  }
+  \sort[direction=descending]{
+    \field[padside=left,padwidth=2,padchar=0]{month}
+    \literal{99}
+  }
+  \sort[direction=descending]{
+    \field[padside=left,padwidth=2,padchar=0]{day}
+    \literal{99}
+  }
+  \sort{
+    \field{sorttitle}
+  }
+  \sort[direction=descending]{
+    \field[padside=left,padwidth=4,padchar=0]{volume}
+    \literal{9999}
+  }
+  \sort{
+    \name{sortname}
+    \name{author}
+    \name{editor}
+    \name{translator}
+    \field{sorttitle}
+    \field{title}
+  }
+}
+
+% patch for bold name in bibliography
+\def\makenamesetup{%
+  \def\bibnamedelima{~}%
+  \def\bibnamedelimb{ }%
+  \def\bibnamedelimc{ }%
+  \def\bibnamedelimd{ }%
+  \def\bibnamedelimi{ }%
+  \def\bibinitperiod{.}%
+  \def\bibinitdelim{~}%
+  \def\bibinithyphendelim{.-}}    
+\newcommand*{\makename}[2]{\begingroup\makenamesetup\xdef#1{#2}\endgroup}
+
+\renewcommand{\mkbibnamegiven}[1]{%
+  \makename{\currname}{#1}%
+  \makename{\findname}{\bld@firstname}%
+  \makename{\findinit}{\bld@firstinit}%
+  \ifboolexpr{ test {\ifdefequal{\currname}{\findname}}%
+    or test {\ifdefequal{\currname}{\findinit}} }%
+  {\mkbibbold{#1}}{#1}%
+}
+
+\renewcommand{\mkbibnamefamily}[1]{%
+  \makename{\currname}{#1}%
+  \makename{\findname}{\bld@lastname}%
+  \ifboolexpr{ test {\ifdefequal{\currname}{\findname}} }%
+  {\mkbibbold{#1}}{#1}%
+}
+
+\newcommand*{\boldname}[3]{%
+  \def\bld@lastname{#1}%
+  \def\bld@firstname{#2}%
+  \def\bld@firstinit{#3}}
+
+\boldname{}{}{}
+
+% We need to tell biblatex to check for all entries
+\nocite{*}
+
+
+% Patch the bibliography
+
+% lets remove the brackets
+\DeclareFieldFormat{labelnumberwidth}{#1.}
+
+% http://tex.stackexchange.com/a/123809/7561
+\defbibenvironment{bibliography}
+{\list
+  {\printtext[labelnumberwidth]{% label format from numeric.bbx
+      \printfield{labelprefix}%
+      \printfield{labelnumber}}}
+  {\setlength{\topsep}{0pt}% layout parameters from moderncvstyleclassic.sty
+    \setlength{\labelwidth}{\hintscolumnwidth}%
+    \setlength{\labelsep}{\separatorcolumnwidth}%
+    \leftmargin\labelwidth%
+    \advance\leftmargin10pt%
+    \advance\leftmargin\labelsep}%
+  \sloppy\clubpenalty4000\widowpenalty4000}
+{\endlist}
+{\item}
+
+
+\endinput
+
+
+%% end of file `moderncvstyleacademic.sty'.

@@ -1,0 +1,53 @@
+\ProvidesFile{project.dbx}
+
+% Project data model
+\DeclareDatamodelEntrytypes{project}
+
+\DeclareDatamodelFields[type=field,datatype=literal]{
+  funding,
+  rol,
+  %
+  funding-en,
+  rol-en,
+  %
+  funding-es,%
+  rol-es,%
+  period%
+}
+
+\DeclareDatamodelFields[type=list, datatype=literal]{number}
+
+\DeclareDatamodelFields[type=field, datatype=literal]{
+  title,
+  title-es,
+  title-en%
+}
+
+\DeclareDatamodelFields[type=field, datatype=datepart]{
+  year,%
+  endyear,%
+  month,%
+  endmonth%
+}
+
+\DeclareDatamodelEntryfields[type=field, datatype=date, label=true]{date}
+
+\DeclareDatamodelEntryfields[project]{
+  number,
+  title,
+  funding,
+  rol,
+  %
+  title-en
+  funding-en,
+  rol-en,
+  %
+  title-es,
+  funding-es,
+  rol-es,
+  %
+  number,
+  period,
+  month,
+  year%
+}

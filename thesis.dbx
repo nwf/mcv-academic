@@ -1,0 +1,47 @@
+\ProvidesFile{thesis.dbx}
+
+% Position data model
+\DeclareDatamodelEntrytypes{thesis}
+
+\DeclareDatamodelFields[type=field, datatype=literal]{
+  organization,%
+  title,%
+  note,%
+  level,%
+  %
+  organization-es,%
+  title-es,%
+  note-es,%
+  %
+  organization-en,%
+  title-en,%
+  note-en%
+}
+
+\DeclareDatamodelFields[type=field, datatype=datepart]{
+  year,%
+  endyear,%
+  month,%
+  endmonth%
+}
+
+\DeclareDatamodelFields[type=field,datatype=date]{
+  date%
+}
+
+\DeclareDatamodelEntryfields[thesis]{%
+  author,%
+  date,%
+  organization,%
+  title,%
+  note,%
+  level,%
+  %
+  organization-es,%
+  title-es,%
+  note-es,%
+  %
+  organization-en,%
+  title-en,%
+  note-en%
+}

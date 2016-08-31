@@ -1,0 +1,38 @@
+\ProvidesFile{cvmisc.bbx}[biblatex bibliography style for cvmiscs in CV entries]
+
+\RequireBibliographyStyle{cv}
+
+
+% Formats
+\DeclareFieldFormat[cvmisc]{title}{#1}
+
+% Driver
+
+\DeclareBibliographyDriver{cvmisc}{%
+  \usebibmacro{begentry}%
+  \usebibmacro{cvitem}{\usebibmacro{range-date}}{%
+    \printmlfield{title}%
+    \newunit%
+    \usebibmacro{description}%
+    \ifmlfieldundef{description}{\addperiod}{}%
+  }%
+  \usebibmacro{cvfinentry}%
+}
+
+% Small syntactic sugar
+\NewBibliographyString{cvmiscs}
+\DefineBibliographyStrings{english}{%
+  cvmiscs = {Miscelaneous},
+}
+\DefineBibliographyStrings{spanish}{%
+  cvmiscs = {Miscelanea},
+}
+
+\newcommand{\printcvmiscs}[1][]{%
+  % Temporaly set the names
+  \letcs\refname{\abx@str @cvmiscs}
+  \letcs\bibname{\abx@str @cvmiscs}
+  \printbibliography[env=nobibenv, type=cvmisc, #1]
+  \letcs\refname{\abx@str @references}
+  \letcs\bibname{\abx@str @bibliography}
+}

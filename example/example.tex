@@ -1,0 +1,108 @@
+% !BIB program = biber
+\documentclass[12pt,a4paper]{moderncv}   % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')
+
+\usepackage[utf8]{inputenc}
+\usepackage[english, spanish.lcroman.tabla.noquoting.noshorthands]{babel}
+% \usepackage[spanish.lcroman.tabla.noquoting.noshorthands]{babel}
+\usepackage[spanish=mexican]{csquotes}
+
+% moderncv themes
+\moderncvstyle{academic}                        % style options are 'casual' (default), 'classic', 'oldstyle' and 'banking'
+\moderncvcolor{grey}                          % color options 'blue' (default), 'orange', 'green', 'red', 'purple', 'grey' and 'black'
+%\renewcommand{\familydefault}{\sfdefault}    % to set the default font; use '\sfdefault' for the default sans serif font, '\rmdefault' for the default roman one, or any tex font name
+%\nopagenumbers{}                             % uncomment to suppress automatic page numbering for CVs longer than one page
+
+
+% For paper portrait
+\usepackage[misc]{ifsym}
+
+\newgeometry{margin=2.5cm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% personal data
+\firstname{John}
+\familyname{Doe}
+\title{Curriculum Vit\ae} % optional, remove / comment the line if not wanted
+
+\address{Fake Street 42}{}{Fakeland, FKL}
+
+\email{johndoe@fake.com}
+\mobile{(+1) 234 5678 } % optional, remove / comment the line if not wanted
+%\phone{+2~(345)~678~901} % optional, remove / comment the line if not wanted
+%\fax{+3~(456)~789~012} % optional, remove / comment the line if not wanted
+
+\homepage{johndoe.com} % optional, remove / comment the line if not wanted
+\social[scholar]{ABC123}
+%\photo[64pt][0.4pt]{picture} % optional, remove / comment the line if not wanted; '64pt' is the height the picture must be resized to, 0.4pt is the thickness of the frame around it (put it to 0pt for no frame) and 'picture' is the name of the picture file
+%\quote{Some quote} % optional, remove / comment the line if not wanted
+
+
+\addbibresource{cvdata.bib}
+
+% If you want to make your name bold in the publications or other entries where you are an author
+% Lastname Name Abbrev.
+\boldname{Doe}{John}{J.}
+
+% We can set the details (by default is false)
+\detailstrue
+
+
+%----------------------------------------------------------------------------------
+%            headers
+%----------------------------------------------------------------------------------
+% We can define the headers in multiple languages and then using the macro
+% These definitions can be inside the body too
+\newmlcommand[english=Education, spanish=Educación]{\education}
+\newmlcommand[english=Degrees, spanish={Grados Académicos}]{\degrees}
+\newmlcommand[english=Technical, spanish={Estudios Técnicos}]{\technical}
+\newmlcommand[english={Employment History}, spanish={Historial de Empleo}]{\employment}
+\newmlcommand[english={Academic}, spanish={Académia}]{\academic}
+\newmlcommand[english={Teaching Experience}, spanish={Experiencia Docente}]{\teaching}
+\newmlcommand[english={Courses Taught}, spanish={Cursos Impartidos}]{\courses}
+\newmlcommand[english={Guided Theses}, spanish={Tésis Guiadas}]{\theses}
+\newmlcommand[english={Funding}, spanish={Proyectos de Investigación}]{\funding}
+\newmlcommand[english={Grants}, spanish={Fondos de Investigación}]{\grants}
+\newmlcommand[english={Publications}, spanish={Publicaciones}]{\publications}
+\newmlcommand[english={Journals}, spanish={Revistas}]{\journals}
+\newmlcommand[english={Other Appointments}, spanish={Otros Cargos}]{\appointments}
+\newmlcommand[english={Memberships}, spanish={Membresias}]{\memberships}
+
+%----------------------------------------------------------------------------------
+%            content
+%----------------------------------------------------------------------------------
+\begin{document}
+%\selectlanguage{spanish}
+\selectlanguage{english}
+
+% Print the header
+\makecvtitle
+
+\section{\education}
+\printstudies[heading=subbibliography, title={\degrees}, keyword=degrees]
+
+\printstudies[heading=subbibliography, title={\technical}, keyword=tech]
+
+\section{\employment}
+\printpositions[heading=subbibliography, title={\academic}]
+
+\section{\teaching}
+\printcourses[heading=subbibliography, title={\courses}]
+
+\printtheses[heading=subbibliography, title={\theses}]
+
+\section{\funding}
+% We can hook \newrefcontext to pass options to the individual print.
+\newrefcontext[labelprefix=A]
+\printprojects[heading=subbibliography, title={\grants}, resetnumbers=true]
+% However note that we need to reset the context
+% Test by commenting the next macro and see what happens to the Publications entries
+\newrefcontext[]
+
+\section{\publications}
+% Notice that you can apply other parameters, like resetnumbers to the printblibliography and other statements
+\printbibliography[type=article, heading=subbibliography,title={\journals}, resetnumbers=true]
+
+\section{\appointments}
+\printcvmiscs[heading=subbibliography, title={\memberships}, keyword=membership]
+
+\end{document}

@@ -1,0 +1,75 @@
+\ProvidesFile{thesis.bbx}[biblatex bibliography style for thesiss in CV entries]
+
+\RequireBibliographyStyle{cv}
+
+
+% Formats
+\DeclareFieldFormat[thesis]{organization}{#1}
+
+\newbibmacro{level}{%
+  \ifmlfieldundef{level}%
+    {}%
+    {%
+      \printtext{%
+      \bibstring{degree}
+      \ifbibxstring{\themlfield{level}}%
+        {\bibxstring{\themlfield{level}}}%
+        {\printmlfield{level}}%
+      }%
+  }
+}
+
+\newbibmacro{note}{%
+  \ifmlfieldundef{note}%
+    {}%
+    {%
+      \printtext[parens]{%
+        \mkbibemph{\printmlfield{note}}%
+      }%
+    }
+}
+
+% Driver
+\DeclareBibliographyDriver{thesis}{%
+  \usebibmacro{begentry}%
+  \usebibmacro{cvitem}{\usebibmacro{range-date}}{%
+    \usebibmacro{author}%
+    \newunit
+    \mkbibemph{\printmlfield{title}}%
+    \newunit%
+    \usebibmacro{organization}%
+    \newunit%
+    \usebibmacro{level}%
+    \newunitpunct%
+    \usebibmacro{note}%
+    \ifmlfieldundef{note}{\addperiod}{}
+  }%
+  \usebibmacro{cvfinentry}%
+}
+
+
+% Small syntactic sugar
+\NewBibliographyString{theses, undergrad, master, doctor, degree}
+\DefineBibliographyStrings{english}{%
+  theses = {Theses},
+  degree = {Degree},
+  undergrad = {Undergraduate},
+  master = {Master},
+  doctor = {Ph\adddot D\adddot},
+}
+\DefineBibliographyStrings{spanish}{%
+  theses = {Tesis},
+  degree = {Grado},
+  undergrad = {Licenciatura},
+  master = {Maestr\'ia},
+  doctor = {Doctoral},
+}
+
+\newcommand{\printtheses}[1][]{%
+  % Temporaly set the names
+  \letcs\refname{\abx@str @theses}
+  \letcs\bibname{\abx@str @theses}
+  \printbibliography[env=nobibenv, type=thesis, #1]
+  \letcs\refname{\abx@str @references}
+  \letcs\bibname{\abx@str @bibliography}
+}
