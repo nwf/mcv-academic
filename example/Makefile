@@ -16,10 +16,9 @@ all: $(LANGS)
 $(LANGS): clean	
 	# compile the language
 	$(eval INPUT="\def\defaultlang{\selectshortlanguage{$@}\details$(DETAILS)}\input{$(SOURCE)}")
-	pdflatex -interaction=nonstopmode $(INPUT) -jobname=$(NAME) || true
 	pdflatex -interaction=nonstopmode $(INPUT) -jobname=$(NAME) 
 	biber $(NAME)
-	pdflatex -interaction=nonstopmode $(INPUT) -jobname=$(NAME) || true
+	pdflatex -interaction=nonstopmode $(INPUT) -jobname=$(NAME)
 	pdflatex -interaction=nonstopmode $(INPUT) -jobname=$(NAME) 
 	# if it finishes move the file to the correct name
 	mv $(NAME).pdf $(NAME)-$@.pdf
