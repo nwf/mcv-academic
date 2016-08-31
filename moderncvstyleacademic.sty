@@ -149,6 +149,12 @@
 % declare default languages
 \babelshortnames{en=english, es=spanish}
 
+% use a select language with short name instead of default long one
+\newcommand{\selectshortlanguage}[1]{%
+  \edef\mylang{\longlanguagename{#1}}%
+  \expandafter\selectlanguage\expandafter{\mylang}%
+}
+
 %-------------------------------------------------------------------------------
 % Academic drivers and sorting to use with this style
 %-------------------------------------------------------------------------------
