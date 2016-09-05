@@ -5,13 +5,13 @@
 
 \DeclareDatamodelFields[type=field,datatype=literal]{
   funding,
-  rol,
+  role,
   %
   funding-en,
-  rol-en,
+  role-en,
   %
   funding-es,%
-  rol-es,%
+  role-es,%
   period%
 }
 
@@ -36,15 +36,15 @@
   number,
   title,
   funding,
-  rol,
+  role,
   %
   title-en
   funding-en,
-  rol-en,
+  role-en,
   %
   title-es,
   funding-es,
-  rol-es,
+  role-es,
   %
   number,
   period,

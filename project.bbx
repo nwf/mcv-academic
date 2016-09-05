@@ -31,14 +31,14 @@
 }
 
 % Bibliography macros
-\newbibmacro{rol}{%
-  \ifmlfieldundef{rol}%
+\newbibmacro{role}{%
+  \ifmlfieldundef{role}%
     {}%
     {%
       \printtext[]{%
-        \ifbibxstring{\themlfield{rol}}%
-        {\bibxstring{\themlfield{rol}}}%
-        {\printmlfield{rol}}%
+        \ifbibxstring{\themlfield{role}}%
+        {\bibxstring{\themlfield{role}}}%
+        {\printmlfield{role}}%
       }%
     }%
 }
@@ -70,7 +70,7 @@
 \DeclareBibliographyDriver{project}{%
   \usebibmacro{bibindex}%
   \usebibmacro{begentry}%
-  \usebibmacro{rol}%
+  \usebibmacro{role}%
   \newunit%
   \printmlfield{title}%
   \newunit%

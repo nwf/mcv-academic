@@ -153,7 +153,7 @@ The style defines the following entries (or types of data)
   * `description`: extra information you want to give about your position. What you did or achieve in such position.
   
 - **Project**. Refers to research or industry projects you won or performed. For example, it aims to hold grants, industry projects, or related items. It supports the following fields
-  * `rol`: your rol in the project. This field is a string or a `bibstring`.
+  * `role`: your role in the project. This field is a string or a `bibstring`.
   * `title`: the name of the project. This field is a string.
   * `number`: the identifier (or list of identifiers separated by `and`) for the project.
   * `funding`: the name of the funding agency or organization that was in charge.
