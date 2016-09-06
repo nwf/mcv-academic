@@ -147,7 +147,9 @@
 \newcommand{\longlanguagename}[1]{\csname @cv@long@#1\endcsname}
 
 % declare default languages
-\babelshortnames{en=english, es=spanish}
+% \babelshortnames{en=english, es=spanish}
+% or imported to be in sync with cv.bbx
+\input{setlanguages.sty}
 
 % use a select language with short name instead of default long one
 \newcommand{\selectshortlanguage}[1]{%
