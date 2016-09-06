@@ -1,0 +1,14 @@
+
+build:
+  image: adnrv/texlive-adntools
+  script:
+    - cd example
+    - make all
+  artifacts:
+    paths:
+      - ./example/example-en.pdf
+      - ./example/example-es.pdf
+  tags:
+    - docker
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                  
