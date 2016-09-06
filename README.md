@@ -253,10 +253,6 @@ and others that are used internally (but are also available for use) are
   
 Note that all these have translations to the other languages as well (here are the English versions for illustrative purposes).
 
-## Setup
-
-
-
 ## Localization
 
 ### Within the style
@@ -271,7 +267,7 @@ The languages are defined in `cv.bbx` and `moderncvstyleacademic.sty` by declari
 
 That is, a list of pairs `<abreviation>=<languagename>`. These languages are not necessarily the same as the ones declared in the main document.
 
-The declaration needs to be repeated as the processing of the styles (`.bbx`) is done at a different time than the `moderncvstyle`, so the macro is not available later. A more robust solution is needed.
+The declaration needs to be repeated as the processing of the styles (`.bbx`) is done at a different time than the `moderncvstyle`, so the macro is not available later. Thus, the robust solution is to use `setlanguages.sty` configuration file in which this macro is declared.
 
 ### Within your CV
 
