@@ -168,6 +168,13 @@
 \DeclareSourcemap{
   \maps[datatype=bibtex]{
     \map{
+      \pertype{study}
+      \pertype{position}
+      \pertype{project}
+      \pertype{course}
+      \pertype{thesis}
+      \pertype{committee}
+      \pertype{cvmisc}
       \step[fieldsource=date, match=\regexp{\A([0-9]{4}-[0-9]{2}-[0-9]{2})\Z}, replace=\regexp{$1/$1}]
       \step[fieldsource=date, match=\regexp{\A([0-9]{4}-[0-9]{2})\Z}, replace=\regexp{$1/$1}]
       \step[fieldsource=date, match=\regexp{\A([0-9]{4})\Z}, replace=\regexp{$1/$1}]
