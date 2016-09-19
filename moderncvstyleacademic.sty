@@ -7,10 +7,16 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{moderncvstyleacademic}[2016/08/28 v1.0.0 modern curriculum vitae and letter style scheme: academic]
 
+\newif\if@citeall
+\@citealltrue
+
 % head section alignment options: "left" (default) or "right"
 \@initializecommand{\moderncvstyleheadoptions}{}
 \DeclareOption{left} {\edef\moderncvstyleheadoptions{\moderncvstyleheadoptions,left}}
 \DeclareOption{right}{\edef\moderncvstyleheadoptions{\moderncvstyleheadoptions,right}}
+
+\DeclareOption{citeall}{\@citealltrue}
+\DeclareOption{nocite}{\@citeallfalse}
 
 \DeclareOption*{}% avoid choking on unknown options
 \ExecuteOptions{left}
@@ -264,7 +270,9 @@
 \boldname{}{}{}
 
 % We need to tell biblatex to check for all entries
-\nocite{*}
+\if@citeall
+  \nocite{*}
+\fi
 
 
 % Patch the bibliography
