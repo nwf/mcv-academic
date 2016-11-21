@@ -68,13 +68,13 @@
 \protected\def\mkbibcvdateshort#1#2#3{%
   \iffieldundef{#3}
   {}
-  {\mkdatezeros{\thefield{#3}}%
+  {\mkyearzeros{\thefield{#3}}%
     \iffieldundef{#2}{}{\datesep}}%
   \iffieldundef{#2}
   {}
-  {\mkdatezeros{\thefield{#2}}%
+  {\mkmonthzeros{\thefield{#2}}%
     \iffieldundef{#1}{}{\datesep}}%
-  \iffieldbibstring{#1}{\bibstring{\thefield{#1}}}{\mkdatezeros{\thefield{#1}}}}%
+  \iffieldbibstring{#1}{\bibstring{\thefield{#1}}}{\mkdayzeros{\thefield{#1}}}}%
 
 \DefineBibliographyExtras{english}{%
 %  \renewcommand*{\datesep}{\space}%
