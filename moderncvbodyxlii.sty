@@ -28,7 +28,17 @@
 % lengths
 %   used by \cvitem (and all children command)
 % if you want to change the width of the column with the dates
-\setlength{\hintscolumnwidth}{0.18\textwidth} 
+\setlength{\hintscolumnwidth}{0.18\linewidth}
+\setlength{\separatorcolumnwidth}{0.025\linewidth}
+
+%todo Fix hard coded \maincolumnwidth
+%We need to patch the \maincolumwidth inside the \cvitem, somewhere outside resets its length, and does not fit to the page
+\renewcommand*{\cvitem}[3][.25em]{%
+  \setlength{\maincolumnwidth}{\maincolumnwidth-.5em}
+  \begin{tabular}{@{}p{\hintscolumnwidth}@{\hspace{\separatorcolumnwidth}}p{\maincolumnwidth}@{}}%
+    \raggedleft\hintstyle{#2} &{#3}%
+  \end{tabular}%
+  \par\addvspace{#1}}
 
 % for the 'classic' style, if you want to force the width allocated to your name and avoid line breaks. be careful though, the length is normally calculated to avoid any overlap with your personal info; use this at your own typographical risks...
 %\setlength{\makecvtitlenamewidth}{10cm}     
