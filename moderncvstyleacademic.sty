@@ -249,20 +249,15 @@
 \newcommand*{\makename}[2]{\begingroup\makenamesetup\xdef#1{#2}\endgroup}
 
 \renewcommand{\mkbibnamegiven}[1]{%
-  \makename{\currname}{#1}%
-  \makename{\findname}{\bld@firstname}%
-  \makename{\findinit}{\bld@firstinit}%
-  \ifboolexpr{ test {\ifdefequal{\currname}{\findname}}%
-    or test {\ifdefequal{\currname}{\findinit}} }%
+  \ifboolexpr{ ( test {\ifdefequal{\bld@firstname}{\namepartgiven}} or test {\ifdefequal{\bld@firstinit}{\namepartgiven}} ) and test {\ifdefequal{\bld@lastname}{\namepartfamily}} }
   {\mkbibbold{#1}}{#1}%
 }
 
 \renewcommand{\mkbibnamefamily}[1]{%
-  \makename{\currname}{#1}%
-  \makename{\findname}{\bld@lastname}%
-  \ifboolexpr{ test {\ifdefequal{\currname}{\findname}} }%
+  \ifboolexpr{ ( test {\ifdefequal{\bld@firstname}{\namepartgiven}} or test {\ifdefequal{\bld@firstinit}{\namepartgiven}} ) and test {\ifdefequal{\bld@lastname}{\namepartfamily}} }
   {\mkbibbold{#1}}{#1}%
 }
+
 
 \newcommand*{\boldname}[3]{%
   \def\bld@lastname{#1}%
