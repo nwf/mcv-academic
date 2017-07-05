@@ -1,0 +1,62 @@
+\ProvidesFile{portuguese-cv.lbx}
+\InheritBibliographyExtras{portuguese}
+
+% Bibliography strings
+\NewBibliographyString{
+  duration,
+  years,
+  year,
+  pi,
+  ai,
+  professor,
+  researcher,
+  assisprofessor, 
+  assocprofessor,
+  present,
+  studies,%
+  positions,%
+  theses, 
+  undergrad, 
+  master, 
+  doctor, 
+  degree,%
+  courses,%
+  cvmiscs%
+}
+
+\DeclareBibliographyStrings{%
+  inherit = {portuguese},
+  duration = {{dura\c{c}\~ao}{dura\c{c}\~ao}},
+  years = {{anos}{anos}},
+  year = {{ano}{ano}},
+  pi = {{Pesquisador Principal}{Pesquisador Principal}},
+  ai = {{Pesquisador Alternativo}{Pesquisador Alternativo}},
+  professor = {{Professor}{Professor}},
+  assisprofessor = {{Profesor Assistente}{Profesor Assistente}},
+  assocprofessor = {{Profesor Associado}{Profesor Associado}},
+  researcher = {{Pesquisador}{Pesquisador}},
+  %
+  present = {{presente}{pres\adddot}},
+  %
+  studies = {{Educa\c{c}\~ao}{Educa\c{c}\~ao}},
+  positions = {{Posi\c{c}\~oes}{Posi\c{c}\~oes}},
+  %
+  theses = {{Teses}{Teses}},
+  degree = {{Grau}{Grau}},
+  undergrad = {{Gradua\c{c}\~ao}{Gradua\c{c}\~ao}},
+  master = {{Mestrado}{Mestrado}},
+  doctor = {{Doutorado}{Doutorado}},
+  %
+  courses = {{Disciplinas}{Disciplinas}},%
+  %
+  cvmiscs = {{Diversos}{Diversos}},
+}
+
+
+\DeclareBibliographyExtras{%
+  \renewcommand*{\bibrangedash}{--}
+  \renewcommand*{\bibdatedash}{--}
+}
+
+
+\endinput

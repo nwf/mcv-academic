@@ -1,6 +1,5 @@
 %% start of file `academic.sty'.
 
-
 %-------------------------------------------------------------------------------
 %                identification
 %-------------------------------------------------------------------------------
@@ -19,7 +18,9 @@
 % Options
 %-------------------------------------------------------------------------------
 \RequirePackage{pgfkeys}
+\RequirePackage{pgffor}
 \RequirePackage{pgfopts}
+\RequirePackage{etoolbox}
 
 % Package options
 \def\unknown@packageoptions{}
@@ -70,7 +71,6 @@
   \moderncvstyle{\@load@style}
 }
 
-
 %-------------------------------------------------------------------------------
 % Multilanguage support
 %-------------------------------------------------------------------------------
@@ -111,24 +111,68 @@
 
 % Create long names for languages, this reuses the code from cv.bbx
 % fixme: merge both definitions (here and cv.bbx)
-\pgfkeys{
+\def\@cv@shortnamelist{}
+\def\@cv@longnamelist{}
+\def\@coma{}
+\pgfkeys{%
   /shortlan/.is family, /shortlan,
-  .unknown/.code = {
-     \expandafter\edef\csname @cv@short@#1\endcsname{\pgfkeyscurrentname}
-     \expandafter\expandafter\expandafter\edef\expandafter\csname @cv@long@\pgfkeyscurrentname\endcsname{#1}
+  .unknown/.code = {%
+    \edef\@cv@shortnamelist{\@cv@shortnamelist\@coma\pgfkeyscurrentname}%
+    \edef\@cv@longnamelist{\@cv@longnamelist\@coma#1}%
+    \def\@coma{,}%
+    \expandafter\edef\csname @cv@short@#1\endcsname{\pgfkeyscurrentname}%
+    \expandafter\expandafter\expandafter\edef\expandafter\csname @cv@long@\pgfkeyscurrentname\endcsname{#1}%
   }
 }
-%\pgfkeys{
-%  /shortlan/.is family, /shortlan,
-%  .unknown/.code = {
-%    \expandafter\edef\csname @cv@short@#1\endcsname{\pgfkeyscurrentname}
-%  }
-%}
 % handler to create the keys
-\def\babelshortnames#1{\pgfkeys{/shortlan, #1}}
+\def\babelshortnames#1{\def\@coma{}\pgfkeys{/shortlan, #1}}
 % directly obtain the short name
 \newcommand{\shortlanguagename}{\csname @cv@short@\languagename\endcsname}
 \newcommand{\longlanguagename}[1]{\csname @cv@long@#1\endcsname}
+
+% Setter for mappings
+\def\@default@mappings{%
+\foreach \@cv@lang in \@cv@longnamelist {%
+  % define the mapping into a macro and then expand it
+  \begingroup\edef\x{\endgroup\noexpand\DeclareLanguageMapping{\@cv@lang}{\@cv@lang-cv}}
+  \x
+}}
+
+% Functions for creating the dbx
+% \localized{text}{\macroToStoreInto}
+\newcommand{\@cv@localize}[3][]{%
+  \def\@coma{#1}
+  \foreach \@cv@lang in \@cv@shortnamelist{%
+    \global\edef#3{#3\@coma#2-\@cv@lang}%
+    \global\def\@coma{,}%
+  }%
+}
+
+\newcommand{\@cv@localizeList}[2]{%
+  \def\@@coma{}
+  \foreach \@word in #1{%
+    \@cv@localize[\@@coma]{\@word}{#2}%
+    \global\def\@@coma{,}%
+  }%
+}
+
+\newcommand{\localizedmacro}[3][]{
+  \ifdefmacro{#3}
+    {\let\@list#3}
+    {\def\@list{#3}}
+  \def\@localized{}%
+  \@cv@localizeList{\@list}{\@localized}%
+  \begingroup\edef\x{\endgroup\noexpand#2[#1]{#3,\@localized}}%
+  \x%
+}
+
+\newcommand{\DeclareLocalizedDatamodelFields}[2][]{%
+  \localizedmacro[#1]{\DeclareDatamodelFields}{#2}%
+}
+
+\newcommand{\DeclareLocalizedDatamodelEntryfields}[2][]{%
+  \localizedmacro[#1]{\DeclareDatamodelEntryfields}{#2}%
+}
 
 % declare default languages
 % \babelshortnames{en=english, es=spanish}
@@ -145,11 +189,6 @@
 % Academic drivers and sorting to use with this style
 %-------------------------------------------------------------------------------
 
-%\RequirePackage[tools={study, position, course, thesis, project, cvmisc}, bibstyle=numeric-comp]{biblatex-multiple-dm}
-%\RequirePackage[tools={cv, numeric-comp}, bibstyle=numeric-comp]{biblatex-multiple-dm}
-
-% bibliography with mutiple entries
-
 % If there is no custom datamodel, load defaul cv.dbx
 \IfFileExists{cv-\@load@style.dbx}%
   {\def\@load@datamodel{cv-\@load@style}}%
@@ -164,6 +203,11 @@
 
 
 \RequirePackage[backend=biber, citestyle=numeric-comp, bibstyle=\@load@bibstyle, datamodel=\@load@datamodel, sorting=ymdtn, maxbibnames=99, defernumbers=true, giveninits=true, sortcites]{biblatex}
+
+
+% Execute mappings (these must be after biblatex loaded, since we will use the \DeclareLangaugeMapping macro)
+\@default@mappings
+\@custom@mappings
 
 % Patch endyears that are not declared
 % http://tex.stackexchange.com/a/327884/7561
@@ -264,78 +308,6 @@
 \fi
 
 
-%% Patch the bibliography
-%
-%% lets remove the brackets
-%\DeclareFieldFormat{labelnumberwidth}{#1.}
-%
-%% http://tex.stackexchange.com/a/123809/7561
-%\defbibenvironment{bibliography}{
-%\list
-%  {\printtext[labelnumberwidth]{% label format from numeric.bbx
-%      \printfield{labelprefix}%
-%      \printfield{labelnumber}}}
-%  {
-%    \ifthenelse{\equal{\@load@style}{banking}}{%
-%      \setlength{\topsep}{0pt}%
-%%      \setlength{\leftmargin}{2em}%
-%      \setlength{\labelwidth}{1.5em}%
-%      \setlength{\labelsep}{\separatorcolumnwidth}%
-%%      \setlength{\itemindent}{0em}%
-%      \leftmargin\labelwidth%
-%      \advance\leftmargin\labelsep%
-%    }{
-%      \setlength{\topsep}{0pt}%
-%      \setlength{\labelwidth}{\hintscolumnwidth}%
-%      \setlength{\labelsep}{\separatorcolumnwidth}%
-%      \leftmargin\labelwidth%
-%      \advance\leftmargin\labelsep%
-%    }%
-%%    \setlength{\topsep}{0pt}% layout parameters from moderncvstyleclassic.sty
-%%    \setlength{\labelwidth}{\hintscolumnwidth}%
-%%    \setlength{\labelsep}{\separatorcolumnwidth}%
-%%    \leftmargin\labelwidth%
-%%    \advance\leftmargin10pt%
-%%    \advance\leftmargin\labelsep
-%  }%
-%  \sloppy\clubpenalty4000\widowpenalty4000}
-%{\endlist}
-%{\item}
-%
-%% New environment withouth the list indent
-%\defbibenvironment{nobibenv}{%
-%  \list{}{%
-%    \ifboolexpr{ (test{\ifdefstring{\@load@style}{classic}} or test{\ifdefstring{\@load@style}{casual}}) }{%
-%      \setlength{\topsep}{0pt}%
-%      \setlength{\labelwidth}{\hintscolumnwidth}%
-%      \setlength{\labelsep}{\separatorcolumnwidth}%
-%      \setlength{\leftmargin}{0pt}%
-%    }{%
-%    \ifthenelse{\equal{\@load@style}{oldstyle}}{%
-%      \setlength{\topsep}{0pt}%
-%      \setlength{\labelwidth}{\hintscolumnwidth}%
-%      \setlength{\labelsep}{\separatorcolumnwidth}%
-%      \leftmargin\labelwidth%
-%      \advance\leftmargin\labelsep%
-%    }{%
-%    \ifthenelse{\equal{\@load@style}{banking}}{%
-%      \setlength{\topsep}{0pt}%
-%      \setlength{\labelwidth}{0pt}%
-%      \setlength{\labelsep}{0pt}%
-%      \setlength{\leftmargin}{0pt}%
-%    }{
-%      \setlength{\topsep}{0pt}%
-%      \setlength{\labelwidth}{\hintscolumnwidth}%
-%      \setlength{\labelsep}{\separatorcolumnwidth}%
-%      \setlength{\leftmargin}{0pt}%
-%    }%
-%    }%
-%    }%
-%    \setlength{\parsep}{0pt}%
-%  }%
-%}%
-%{\endlist}
-%{\item}
 
 %-------------------------------------------------------------------------------
 % Factory for the printbibliography replacements
@@ -361,40 +333,6 @@
 %-------------------------------------------------------------------------------
 % Patching moderncv
 %-------------------------------------------------------------------------------
-
-%\RequirePackage{xpatch}
-%% Patch blank printing
-%\newcommand{\ifnoprint}[3]{%
-%  \setbox0=\hbox{#1\unskip}\ifdim\wd0=0pt%
-%  #2\else#3\fi%
-%}
-
-% Patch cventry for better blank support
-%\xpatchcmd{\cventry}%
-%{\ifthenelse{\equal{#4}{}}}%
-%{\ifnoprint{#4}}%
-%{}{\PackageWarning{academic}{Error patching \noexpand\cventry}}%
-%
-%\xpatchcmd{\cventry}%
-%{\ifthenelse{\equal{#5}{}}}%
-%{\ifnoprint{#5}}%
-%{}{\PackageWarning{academic}{Error patching \noexpand\cventry}}%
-%
-%\xpatchcmd{\cventry}%
-%{\ifthenelse{\equal{#6}{}}}%
-%{\ifnoprint{#6}}%
-%{}{\PackageWarning{academic}{Error patching \noexpand\cventry}}%
-%
-%% Patch the comments on the entries to avoid spurious white space
-%\xpatchcmd{\cventry}%
-%{\ifx}%
-%{\ifdetails\ifx}%
-%{}{\PackageWarning{academic}{Error patching \noexpand\cventry}}%
-%
-%\xpatchcmd{\cventry}%
-%{\fi}%
-%{\fi\fi}%
-%{}{\PackageWarning{academic}{Error patching \noexpand\cventry}}%
 
 % Patch socials
 \RenewDocumentCommand{\social}{O{}O{}m}{%
