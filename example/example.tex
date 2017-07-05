@@ -2,21 +2,50 @@
 \documentclass[12pt,a4paper]{moderncv}   % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')
 
 \usepackage[utf8]{inputenc}
-\usepackage[english, spanish.lcroman.tabla.noquoting.noshorthands]{babel}
-% \usepackage[spanish.lcroman.tabla.noquoting.noshorthands]{babel}
+\usepackage[english, portuguese, spanish.lcroman.tabla.noquoting.noshorthands.notilde]{babel}
 \usepackage[spanish=mexican]{csquotes}
 
 % moderncv themes
-\moderncvstyle{academic}                        % style options are 'casual' (default), 'classic', 'oldstyle' and 'banking'
-\moderncvcolor{grey}                          % color options 'blue' (default), 'orange', 'green', 'red', 'purple', 'grey' and 'black'
+% I use this for automatic creation of the cv
+% default options passed outside of the cv, generally through the Makefile
+\ifdef{\defaultstyle}%
+{}{%
+  % options by hand
+  \def\defaultstyle{academic}
+}
+\ifdef{\defaultdetails}%
+{}{%
+  % options by hand
+  \def\defaultdetails{true}
+}
+\ifdef{\defaultopts}%
+% default options passed outside of the cv, generally through the Makefile
+{}{%
+  % options by hand
+  \def\defaultopts{%
+    \selectlanguage{portuguese}
+%    \selectshortlanguage{pt}%
+  }
+}
+
+%\usepackage[style=classic, details]{academic}
+%\usepackage[style=oldstyle, details]{academic}
+%\usepackage[style=fancy, details]{academic}
+%\usepackage[style=banking, details]{academic}
+%\usepackage[style=casual, details]{academic}
+%\usepackage[style=academic, details]{academic}
+%\usepackage[style=friggeri , details]{academic}
+\usepackage[style=\defaultstyle, details=\defaultdetails]{academic}
+
+% color options 'blue' (default), 'orange', 'green', 'red', 'purple', 'grey' and 'black'
+\moderncvcolor{grey}
+\moderncvicons{fa-academic}
+
 %\renewcommand{\familydefault}{\sfdefault}    % to set the default font; use '\sfdefault' for the default sans serif font, '\rmdefault' for the default roman one, or any tex font name
 %\nopagenumbers{}                             % uncomment to suppress automatic page numbering for CVs longer than one page
 
-
-% For paper portrait
-\usepackage[misc]{ifsym}
-
-\newgeometry{margin=2.5cm}
+\usepackage{geometry}
+\geometry{margin=2cm}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % personal data
@@ -43,42 +72,33 @@
 % Lastname Name Abbrev.
 \boldname{Doe}{John}{J.}
 
-% We can set the details (by default is false)
-\detailstrue
-
 
 %----------------------------------------------------------------------------------
 %            headers
 %----------------------------------------------------------------------------------
 % We can define the headers in multiple languages and then using the macro
 % These definitions can be inside the body too
-\newmlcommand[english=Education, spanish=Educación]{\education}
-\newmlcommand[english=Degrees, spanish={Grados Académicos}]{\degrees}
-\newmlcommand[english=Technical, spanish={Estudios Técnicos}]{\technical}
-\newmlcommand[english={Employment History}, spanish={Historial de Empleo}]{\employment}
-\newmlcommand[english={Academic}, spanish={Académia}]{\academic}
-\newmlcommand[english={Teaching Experience}, spanish={Experiencia Docente}]{\teaching}
-\newmlcommand[english={Courses Taught}, spanish={Cursos Impartidos}]{\courses}
-\newmlcommand[english={Guided Theses}, spanish={Tésis Guiadas}]{\theses}
-\newmlcommand[english={Funding}, spanish={Proyectos de Investigación}]{\funding}
-\newmlcommand[english={Grants}, spanish={Fondos de Investigación}]{\grants}
-\newmlcommand[english={Publications}, spanish={Publicaciones}]{\publications}
-\newmlcommand[english={Journals}, spanish={Revistas}]{\journals}
-\newmlcommand[english={Other Appointments}, spanish={Otros Cargos}]{\appointments}
-\newmlcommand[english={Memberships}, spanish={Membresias}]{\memberships}
+\newmlcommand[english=Education, spanish=Educación, portuguese=Educação]{\education}
+\newmlcommand[english=Degrees, spanish={Grados Académicos}, portuguese={Graus Acadêmicos}]{\degrees}
+\newmlcommand[english=Technical, spanish={Estudios Técnicos}, portuguese={Estudos Técnicos}]{\technical}
+\newmlcommand[english={Employment History}, spanish={Historial de Empleo}, portuguese={Emprego Histórico}]{\employment}
+\newmlcommand[english={Academic}, spanish={Académia}, portuguese={Academia}]{\academic}
+\newmlcommand[english={Teaching Experience}, spanish={Experiencia Docente}, portuguese={Experiência Docente}]{\teaching}
+\newmlcommand[english={Courses Taught}, spanish={Cursos Impartidos}, portuguese={Disciplinas Ministradas}]{\courses}
+\newmlcommand[english={Guided Theses}, spanish={Tésis Guiadas}, portuguese={Teses Orientadas}]{\theses}
+\newmlcommand[english={Funding}, spanish={Proyectos de Investigación}, portuguese={Projetos de Pesquisa}]{\funding}
+\newmlcommand[english={Grants}, spanish={Fondos de Investigación}, portuguese={Fundos de Pesquisa}]{\grants}
+\newmlcommand[english={Publications}, spanish={Publicaciones}, portuguese={Publicações}]{\publications}
+\newmlcommand[english={Journals}, spanish={Revistas}, portuguese={Revistas}]{\journals}
+\newmlcommand[english={Other Appointments}, spanish={Otros Cargos}, portuguese={Outras Nomeações}]{\appointments}
+\newmlcommand[english={Memberships}, spanish={Membresias}, portuguese={Sociedades}]{\memberships}
 
 %----------------------------------------------------------------------------------
 %            content
 %----------------------------------------------------------------------------------
 \begin{document}
 % I use this for automatic creation of the cv
-\ifdef{\defaultopts}%
-% default options passed outside of the cv, generally through the Makefile
-{\defaultops}{%
-  % options by hand
-  %    \selectlanguage{spanish}
-  \selectshortlanguage{es}
-}
+\defaultopts
 
 % Print the header
 \makecvtitle

@@ -1,32 +1,36 @@
 # Our languages
-LANGS = en es
+LANGS = en es pt
+STYLES = classic oldstyle fancy banking casual academic friggeri
+PATTERNS := $(foreach style, $(STYLES), $(foreach lang, $(LANGS), $(style)-$(lang)))
 
 # Default source options
 NAME = example
 SOURCE = $(NAME: %=%.tex)
 DETAILS = true
 
-# Rules
-all: $(LANGS)
-
 # Default make to build these rules instead of files in case they exist
-.PHONY: all clean veryclean $(LANGS)
+.PHONY: all clean veryclean $(PATTERNS)
+
+# Rules
+all: $(PATTERNS)
 
 # we need to clean before compiling a new language
-$(LANGS): clean	
+$(PATTERNS): clean	
 	# compile the language
-	$(eval INPUT="\def\defaultlang{\selectshortlanguage{$@}\details$(DETAILS)}\input{$(SOURCE)}")
-	pdflatex -interaction=nonstopmode $(INPUT) -jobname=$(NAME) 
+	$(eval STYLE = $(firstword $(subst -, ,$@)))
+	$(eval LANG = $(lastword $(subst -, ,$@)))	
+	$(eval INPUT="\def\defaultstyle{$(STYLE)}\def\defaultdetails{$(DETAILS)}\def\defaultopts{\selectshortlanguage{$(LANG)}}\input{$(SOURCE)}")
+	pdflatex -interaction=nonstopmode $(INPUT) -jobname=$(NAME)
 	biber $(NAME)
 	pdflatex -interaction=nonstopmode $(INPUT) -jobname=$(NAME)
-	pdflatex -interaction=nonstopmode $(INPUT) -jobname=$(NAME) 
+	pdflatex -interaction=nonstopmode $(INPUT) -jobname=$(NAME)
 	# if it finishes move the file to the correct name
 	mv $(NAME).pdf $(NAME)-$@.pdf
 
 
-# ignoramos los errores con -
+# Clean
 clean:
-	rm *.log *.aux *.out *.blg *.bbl *.run.xml *.bcf || true
+	rm *.log *.aux *.out *.blg *.bbl *.run.xml *.bcf *.synctex.gz || true
 
 veryclean: clean
 	rm *.pdf || true
