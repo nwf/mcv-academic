@@ -1,0 +1,60 @@
+\ProvidesFile{english-cv.lbx}
+\InheritBibliographyExtras{english}
+
+% Bibliography strings
+\NewBibliographyString{
+  duration,
+  years,
+  year,
+  pi,
+  ai,
+  professor,
+  researcher,
+  assisprofessor, 
+  assocprofessor,
+  present,
+  studies,%
+  positions,%
+  theses, 
+  undergrad, 
+  master, 
+  doctor, 
+  degree,%
+  courses,%
+  cvmiscs%
+}
+
+\DeclareBibliographyStrings{%
+  inherit = {american},
+  duration = {{time frame}{time frame}},
+  years = {{years}{years}},
+  year = {{year}{year}},
+  pi = {{Principal Investigator}{Principal Investigator}},
+  ai = {{Alternating Investigator}{Alternating Investigator}},
+  professor = {{Professor}{Professor}},
+  assisprofessor = {{Assistant Professor}{Assistant Professor}},
+  assocprofessor = {{Associate Professor}{Associate Professor}},
+  researcher = {{Researcher}{Researcher}},
+  %
+  present = {{present}{pres\adddot}},
+  %
+  studies = {{Education}{Education}},
+  positions = {{Positions}{Positions}},
+  %
+  theses = {{Theses}{Theses}},
+  degree = {{Degree}{Degree}},
+  undergrad = {{Undergraduate}{Undergraduate}},
+  master = {{Master}{Master}},
+  doctor = {{Ph\adddot D\adddot}{Ph\adddot D\adddot}},%
+  %
+  courses = {{Courses}{Courses}},%
+  %
+  cvmiscs = {{Miscelaneous}{Miscelaneous}},%
+}
+
+
+\DeclareBibliographyExtras{%
+  \uspunctuation%
+}
+
+\endinput

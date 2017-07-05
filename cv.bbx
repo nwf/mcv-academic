@@ -1,4 +1,5 @@
 \ProvidesFile{cv.bbx}[biblatex bibliography style for CV entries]
+\RequireBiber[3]
 
 \ifdef{\biblatexmultipledm@bibstyle}
 {\RequireBibliographyStyle{\biblatexmultipledm@bibstyle}}
@@ -7,83 +8,77 @@
 % Create short names for languages
 \RequirePackage{pgfkeys}
 
+%-------------------------------------------------------------------------------
+% Language handlers
+%-------------------------------------------------------------------------------
 
-\pgfkeys{
-  /shortlan/.is family, /shortlan,
-  .unknown/.code = {
-    \expandafter\edef\csname @cv@short@#1\endcsname{\pgfkeyscurrentname}
-%    \expandafter\edef\expandafter\csname @cv@long@\pgfkeyscurrentname\endcsname{#1}
-  }
-}
-% handler to create the keys
-\def\babelshortnames#1{\pgfkeys{/shortlan, #1}}
-% directly obtain the short name
-\def\shortlanguagename{\csname @cv@short@\languagename\endcsname}
-%\def\longlanguagename[1]{\csname @cv@long@#1\endcsname}
+\DeclareLanguageMapping{english}{english-cv}
+\DeclareLanguageMapping{spanish}{spanish-cv}
 
-% declare default languages
-% \babelshortnames{en=english, es=spanish}
-% or imported to be in sync with moderncvstyleacademic.sty
-\input{setlanguages.sty}
+%\pgfkeys{
+%  /shortlan/.is family, /shortlan,
+%  .unknown/.code = {
+%    \expandafter\edef\csname @cv@short@#1\endcsname{\pgfkeyscurrentname}
+%  }
+%}
+%% handler to create the keys
+%\def\babelshortnames#1{\pgfkeys{/shortlan, #1}}
+%% directly obtain the short name
+%\def\shortlanguagename{\csname @cv@short@\languagename\endcsname}
+%%\def\longlanguagename[1]{\csname @cv@long@#1\endcsname}
+%
+%%% declare default languages
+%%% \babelshortnames{en=english, es=spanish}
+%%% or imported to be in sync with moderncvstyleacademic.sty
+%\input{setlanguages.sty}
 
-% Bibliography strings
-\NewBibliographyString{
-  duration,years,year,
-  pi,ai,professor,researcher,
-  assisprofessor, assocprofessor,
-  present,presentabbr}
-
-\DefineBibliographyStrings{english}{%
-  duration = {time frame},
-  years = {years},
-  year = {year},
-  pi = {Principal Investigator},
-  ai = {Alternating Investigator},
-  professor = {Professor},
-  assisprofessor = {Assistant Professor},
-  assocprofessor = {Associate Professor},
-  researcher = {Researcher},
-  %
-  present = {present},
-  presentabbr = {pres\adddot},
-}
-\DefineBibliographyStrings{spanish}{%
-  duration = {duraci\'on},
-  years = {a\~nos},
-  year = {a\~no},
-  pi = {Investigador Principal},
-  ai = {Investigador Alterno},
-  professor = {Profesor},
-  assisprofessor = {Profesor Asistente},
-  assocprofessor = {Profesor Asociado},
-  researcher = {Investigador},
-  %
-  present = {presente},
-  presentabbr = {pres\adddot},
-}
-
+%% Bibliography strings
+%\NewBibliographyString{
+%  duration,years,year,
+%  pi,ai,professor,researcher,
+%  assisprofessor, assocprofessor,
+%  present,presentabbr}
+%
+%\DefineBibliographyStrings{english}{%
+%  duration = {time frame},
+%  years = {years},
+%  year = {year},
+%  pi = {Principal Investigator},
+%  ai = {Alternating Investigator},
+%  professor = {Professor},
+%  assisprofessor = {Assistant Professor},
+%  assocprofessor = {Associate Professor},
+%  researcher = {Researcher},
+%  %
+%  present = {present},
+%  presentabbr = {pres\adddot},
+%}
+%\DefineBibliographyStrings{spanish}{%
+%  duration = {duraci\'on},
+%  years = {a\~nos},
+%  year = {a\~no},
+%  pi = {Investigador Principal},
+%  ai = {Investigador Alterno},
+%  professor = {Profesor},
+%  assisprofessor = {Profesor Asistente},
+%  assocprofessor = {Profesor Asociado},
+%  researcher = {Investigador},
+%  %
+%  present = {presente},
+%  presentabbr = {pres\adddot},
+%}
+%
 % Extra definitions for languages
-\newcommand*{\datesep}{~}
-% taken from biblatex/lbx/<anylanguage>.lbx
-\protected\def\mkbibcvdateshort#1#2#3{%
-  \iffieldundef{#3}
-  {}
-  {\mkyearzeros{\thefield{#3}}%
-    \iffieldundef{#2}{}{\datesep}}%
-  \iffieldundef{#2}
-  {}
-  {\mkmonthzeros{\thefield{#2}}%
-    \iffieldundef{#1}{}{\datesep}}%
-  \iffieldbibstring{#1}{\bibstring{\thefield{#1}}}{\mkdayzeros{\thefield{#1}}}}%
 
-\DefineBibliographyExtras{english}{%
-%  \renewcommand*{\datesep}{\space}%
-}
-\DefineBibliographyExtras{spanish}{%
-  \renewcommand*{\bibrangedash}{--}
-  \renewcommand*{\bibdatedash}{--}
-%  \renewcommand*{\datesep}{\space}
-}
+%
+%\DefineBibliographyExtras{english}{%
+%%  \renewcommand*{\datesep}{\space}%
+%}
+%\DefineBibliographyExtras{spanish}{%
+%  \renewcommand*{\bibrangedash}{--}
+%  \renewcommand*{\bibdatedash}{--}
+%%  \renewcommand*{\datesep}{\space}
+%}
 
 % Multi language macros
 \newbibmacro*{langfield}[1]{%
@@ -95,43 +90,175 @@
 }
 
 \newcommand{\ifmlfieldundef}[3]{%
-\iffieldundef{\mlfield{#1}}{#2}{#3}%
+  \iffieldundef{\mlfield{#1}}{#2}{#3}%
 }
 
 \newcommand{\themlfield}[1]{\thefield{\mlfield{#1}}}
 
-\newcommand{\printmlfield}[1]{\printtext[#1]{\themlfield{#1}}}
+% print (m)ulti(l)anguage fields
+\newcommand{\printmlfield}[2][\empty]{%
+  \ifx\empty#1\relax\printfield[#2]{\mlfield{#2}}\else\printfield[#1]{\mlfield{#2}}\fi
+}
 
-\DeclareFieldFormat{details}{\ifdetails#1\fi}
+
+%-------------------------------------------------------------------------------
+% Drivers
+%-------------------------------------------------------------------------------
+
+\DeclareBibliographyDriver{cventry}{%
+  \usebibmacro{begentry}%
+  \usebibmacro{cvitem}%
+  {\usebibmacro{range-date}}%
+  {%
+    \ifnameundef{author}{}{\usebibmacro{author}\newunit}%
+    \printmlfield{title}%
+    \newunit%
+    \printmlfield{organization}%
+    \setunit*{\addcomma\space}%
+    \printmlfield{country}
+    \newunit%
+    \ifmlfieldundef{level}{}{\usebibmacro{level}\newunit}%
+    \usebibmacro{note}%
+    \usebibmacro{description}%
+  }
+  \usebibmacro{cvfinentry}%
+}
+
+\DeclareBibliographyAlias{course}{cventry}
+
+\DeclareBibliographyAlias{position}{cventry}
+
+\DeclareBibliographyDriver{project}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \printmlfield{role}%
+  \newunit%
+  %  \setunit*{\addperiod\space}%
+  \printmlfield{title}%
+  \newunit%
+  \usebibmacro{funding-project}%
+  \setunit*{\addspace}%
+  \usebibmacro{period}%
+  \newunit%
+  \usebibmacro{projdate}%
+  \usebibmacro{finentry}%
+}
+
+\DeclareBibliographyAlias{study}{cventry}
+
+\DeclareBibliographyAlias{thesis}{cventry}
+
+\DeclareBibliographyAlias{cvmisc}{cventry}
+
+%-------------------------------------------------------------------------------
+% Formats
+%-------------------------------------------------------------------------------
+
+% General
+\DeclareFieldFormat{title}{\mkbibquote{#1}}
+\DeclareFieldFormat{organization}{\mkbibemph{#1}}
+\DeclareFieldFormat{note}{\mkbibparens{#1\adddot}}
+\DeclareFieldFormat{details}{\ifdetails\small#1\fi}
+
+% Specific
+\DeclareFieldFormat[study]{title}{\mkbibbold{#1}}
+
+\DeclareFieldFormat[course]{title}{\mkbibbold{#1}}
+
+\DeclareFieldFormat[position]{title}{\mkbibbold{\usebibmacro{field-bibstring}{#1}}}
+
+\DeclareFieldFormat[thesis]{level}{\usebibmacro{field-bibstring}{#1}}
+
+
+\DeclareFieldFormat[project]{role}{\mkbibbold{\usebibmacro{field-bibstring}{#1}}}
+\DeclareFieldFormat[project]{title}{\mkbibquote{#1}}
+\DeclareFieldFormat[project]{funding}{\mkbibemph{#1}}
+\DeclareFieldFormat[project]{period}{%
+  \mkbibparens{%
+    % convert period into dimension to make float comparisons
+    \newdimen\dummyDim%
+    \dummyDim = #1 pt%
+    \bibstring{duration}\addcolon\addspace #1\addnbspace%
+    \ifdim\dummyDim > 1pt%
+    \bibstring{years}%
+    \else%
+    \bibstring{year}%
+    \fi%
+  }
+}
+\DeclareListFormat[project]{number}{%
+  \ifnumequal{\value{listcount}}{1}{%
+    \ifnumgreater{\value{liststop}}{1}%
+    {Nos.}{No.}%
+  }{}
+  \usebibmacro{list:delim}{#1}%
+  #1\isdot
+  \usebibmacro{list:andothers}%
+}
+
+\DeclareFieldFormat[cvmisc]{title}{#1}
+
+%-------------------------------------------------------------------------------
+% Macros
+%-------------------------------------------------------------------------------
+\newbibmacro*{field-bibstring}[1]{%
+  \ifbibstring{#1}%
+  {\bibstring{#1}}%
+  {#1}%
+}
+
+\newbibmacro*{funding-project}{%
+  \ifmlfieldundef{funding}%
+    {}%
+    {\printmlfield{funding}}%
+  \setunit*{\space}%
+  \iflistundef{number}%
+    {}%
+    {\printlist[number]{number}}%
+}
+
+\newbibmacro*{period}{%
+  \iffieldundef{period}%
+    {}%
+    {\printmlfield{period}}%
+}
+
+\newbibmacro*{projdate}{%
+  \mkbibdatelong{year}{month}{}%
+}
+
+\newbibmacro{level}{%
+  \ifmlfieldundef{level}%
+  {}%
+  {%
+    \printtext{%
+      \bibstring{degree}: \printmlfield{level}%
+    }%
+  }%
+}
+
+\newbibmacro*{note}{%
+  \ifmlfieldundef{note}%
+  {}%
+  {\printmlfield{note}}%
+}
+
 
 % CV format macros
-\newbibmacro{cvitem}[3][0.25em]{\cvitem{#2}{#3}\par\addvspace{#1}}
+\newlength{\cvitemskip}
+\setlength{\cvitemskip}{0.25em}
+\newbibmacro{cventry}[7][\cvitemskip]{\cventry[#1]{#2}{#3}{#4}{#5}{#6}{#7}}
 
+\newbibmacro{cvitem}[3][\cvitemskip]{\cvitem{#2}{#3}\par\addvspace{#1}}
 % make finentry to do nothing
 \newbibmacro*{cvfinentry}{}
 
-\DeclareFieldFormat{parens}{\mkbibparens{#1}}
-
-
-% New environment withouth the list indent
-\defbibenvironment{nobibenv}{%
-  \list{}{%
-    \setlength{\leftmargin}{\bibhang}%
-    \setlength{\itemindent}{-\leftmargin+10pt}%
-    \setlength{\itemsep}{0pt}%
-    \setlength{\parsep}{0pt}%
-  }%
-}%
-{\endlist}
-{\item}
-
-
 % Common formats
 \newbibmacro*{range-date}{%
-  \iffieldundef{year}
-  {}
+  \iffieldundef{year}%
+  {}%
   {\printtext{%
-    % If the item is in the same year, 
+    % If the item is in the same year,
     \iffieldsequal{year}{endyear}%
       % compress
       {\mkbibcvdateshort{}{month}{}}%
@@ -146,13 +273,13 @@
           \) }%
           {}%
           {\bibdatedash}%
-        % if a range is given but blank, 
+        % if a range is given but blank,
         \iffieldequalstr{endyear}{}%
           % default to "present"
           {\ifdetails% print long version (we may have room, unless there is no description)
-              \ifmlfieldundef{description}{\bibstring{presentabbr}}{\bibstring{present}}%
+              \ifmlfieldundef{description}{\bibsstring{present}}{\bibstring{present}}%
             \else% print short version
-              \bibstring{presentabbr}%
+              \bibsstring{present}%
             \fi%
           }%
           % else, print a range
@@ -162,18 +289,66 @@
   }%
 }
 
-
-\newbibmacro*{organization}{\printmlfield{organization}}
-
-\newbibmacro*{country}{\printmlfield{country}}
+\newcommand*{\datesep}{~}
+% taken from biblatex/lbx/<anylanguage>.lbx
+\protected\def\mkbibcvdateshort#1#2#3{%
+  \iffieldundef{#3}
+  {}%
+  {\mkyearzeros{\thefield{#3}}%
+    \iffieldundef{#2}{}{\datesep}}%
+  \iffieldundef{#2}%
+  {}%
+  {\mkmonthzeros{\thefield{#2}}%
+    \iffieldundef{#1}{}{\datesep}}%
+  \iffieldbibstring{#1}{\bibstring{\thefield{#1}}}{\mkdayzeros{\thefield{#1}}}}%
 
 \newbibmacro{description}{%
   \printtext[details]{%
     \ifmlfieldundef{description}%
     {\clearfield{\mlfield{description}}}%
     {%
-      \ifblank{\thefield{description}}{}{\newline{}\begin{minipage}[t]{\linewidth}\printmlfield{description}\end{minipage}}%
+      \ifblank{\thefield{description}}{}{\par\begin{minipage}[t]{\linewidth}\printmlfield{description}\adddot\end{minipage}}%
     }%
   }%
 }
 
+
+%-------------------------------------------------------------------------------
+% Patch the bibliography
+%-------------------------------------------------------------------------------
+
+% lets remove the brackets
+\DeclareFieldFormat{labelnumberwidth}{#1.}
+
+% http://tex.stackexchange.com/a/123809/7561
+\defbibenvironment{bibliography}{
+  \list
+  {\printtext[labelnumberwidth]{% label format from numeric.bbx
+      \printfield{labelprefix}%
+      \printfield{labelnumber}}}
+  {%
+      \setlength{\topsep}{0pt}%
+      \setlength{\labelwidth}{\hintscolumnwidth}%
+      \setlength{\labelsep}{\separatorcolumnwidth}%
+      \leftmargin\labelwidth%
+      \advance\leftmargin\labelsep%
+  }%
+  \sloppy\clubpenalty4000\widowpenalty4000}
+{\endlist}
+{\item}
+
+% New environment withouth the list indent
+\defbibenvironment{nobibenv}{%
+  \list{}{%
+    \setlength{\topsep}{0pt}%
+    \setlength{\labelwidth}{\hintscolumnwidth}%
+    \setlength{\labelsep}{\separatorcolumnwidth}%
+    \setlength{\leftmargin}{0pt}%
+    \setlength{\parsep}{0pt}%
+  }%
+}%
+{\endlist}
+{\item}
+
+
+\endinput

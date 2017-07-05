@@ -1,0 +1,98 @@
+\ProvidesFile{cv-banking.bbx}
+
+\RequireBibliographyStyle{cv}
+
+%-------------------------------------------------------------------------------
+% MCV Macros
+%-------------------------------------------------------------------------------
+
+\renewcommand*{\cventry}[7][.25em]{%
+  \begin{tabular*}{\maincolumnwidth}{p{0.8\maincolumnwidth}@{\extracolsep{\fill}}r}%
+    #4 & #5\\%
+    {\begin{minipage}[t]{\linewidth}#3\end{minipage}} & #2\\%
+  \end{tabular*}%
+  #7%
+  \par\addvspace{#1}}
+
+\renewcommand*{\cvitem}[3][.25em]{%
+  \begin{tabular*}{\maincolumnwidth}{p{0.8\maincolumnwidth}@{\extracolsep{\fill}}r}%
+    {\begin{minipage}[t]{\linewidth}#3\end{minipage}} & {#2}\\%
+  \end{tabular*}%
+  \par\addvspace{#1}}
+
+%-------------------------------------------------------------------------------
+% Drivers
+%-------------------------------------------------------------------------------
+
+\DeclareBibliographyDriver{cventry}{%
+  \usebibmacro{begentry}%
+  \usebibmacro{cventry}%
+  {\usebibmacro{range-date}}%
+  {%
+    \ifnameundef{author}{}{\usebibmacro{author}\newunitpunct}%
+    \printmlfield{title}%
+    \newunitpunct
+    \ifmlfieldundef{level}{}{\usebibmacro{level}\newunitpunct}%
+    \usebibmacro{note}%
+  }%
+  {\printmlfield{organization}}%
+  {\printmlfield{country}}%
+  {}%
+  {\usebibmacro{description}}
+  \usebibmacro{cvfinentry}%
+}
+
+\DeclareBibliographyDriver{cvmisc}{%
+  \usebibmacro{begentry}%
+  \usebibmacro{cvitem}%
+  {\usebibmacro{range-date}}%
+  {%
+    \ifnameundef{author}{}{\usebibmacro{author}\newunit}%
+    \printmlfield{title}%
+    \newunitpunct%
+    \printmlfield{organization}%
+    \setunit*{\addcomma\space}%
+    \printmlfield{country}
+    \newunit%
+    \ifmlfieldundef{level}{}{\usebibmacro{level}\newunit}%
+    \usebibmacro{note}%
+    \phantom{\printtext{)}}
+  }
+  \usebibmacro{cvfinentry}%
+}
+
+%-------------------------------------------------------------------------------
+% Patch the bibliography
+%-------------------------------------------------------------------------------
+
+\defbibenvironment{bibliography}{
+\list
+  {\printtext[labelnumberwidth]{% label format from numeric.bbx
+      \printfield{labelprefix}%
+      \printfield{labelnumber}}}
+  {%
+    \setlength{\topsep}{0pt}%
+    \setlength{\labelwidth}{1.5em}%
+    \setlength{\labelsep}{\separatorcolumnwidth}%
+    \leftmargin\labelwidth%
+    \advance\leftmargin\labelsep%
+  }%
+  \sloppy\clubpenalty4000\widowpenalty4000}
+{\endlist}
+{\item}
+
+% New environment withouth the list indent
+\defbibenvironment{nobibenv}{%
+  \list{}{%
+    \setlength{\topsep}{0pt}%
+    \setlength{\labelwidth}{0pt}%
+    \setlength{\labelsep}{0pt}%
+    \setlength{\leftmargin}{0pt}%
+    \setlength{\parsep}{0pt}%
+  }%
+}%
+{\endlist}
+{\item}
+
+
+\endinput

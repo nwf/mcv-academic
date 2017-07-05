@@ -1,0 +1,151 @@
+\ProvidesFile{cv.dbx}
+
+\DeclareDatamodelFields[type=field, datatype=literal]{
+  level,%
+  period,%
+  %
+  organization,%
+  title,%
+  country,%
+  description,%
+  funding,
+  role,%
+  note,%
+  %
+  organization-es,%
+  title-es,%
+  country-es,%
+  description-es,%
+  funding-es,
+  role-es,
+  note-es,%
+  %
+  organization-en,%
+  title-en,%
+  country-en,%
+  description-en,%
+  funding-en,%
+  role-en,%
+  note-en%
+}
+
+
+\DeclareDatamodelFields[type=list, datatype=literal]{
+  number
+}
+
+\DeclareDatamodelFields[type=field, datatype=datepart]{
+  year,%
+  endyear,%
+  month,%
+  endmonth%
+}
+
+\DeclareDatamodelFields[type=field,datatype=date]{
+  date%
+}
+
+% Entries
+\DeclareDatamodelEntrytypes{course, cvmisc, position, project, study, thesis}
+
+% Data models
+
+\DeclareDatamodelEntryfields[course]{%
+  date,%
+  organization,%
+  title,%
+  description,%
+  %
+  organization-es,%
+  title-es,%
+  description-es,%
+  %
+  organization-en,%
+  title-en,%
+  description-en%
+}
+
+\DeclareDatamodelEntryfields[cvmisc]{%
+  date,%
+  title,%
+  description,%
+  %
+  title-es,%
+  description-es,%
+  %
+  title-en,%
+  description-en%
+}
+
+\DeclareDatamodelEntryfields[position]{%
+  date,%
+  organization,%
+  title,%
+  country,%
+  description,%
+  %
+  organization-es,%
+  title-es,%
+  country-es,%
+  description-es,%
+  %
+  organization-en,%
+  title-en,%
+  country-en,%
+  description-en%
+}
+
+\DeclareDatamodelEntryfields[project]{
+  number,
+  title,
+  funding,
+  role,
+  %
+  title-en
+  funding-en,
+  role-en,
+  %
+  title-es,
+  funding-es,
+  role-es,
+  %
+  number,
+  period,
+  month,
+  year%
+}
+
+\DeclareDatamodelEntryfields[study]{%
+  date,%
+  organization,%
+  title,%
+  country,%
+  description,%
+  %
+  organization-es,%
+  title-es,%
+  country-es,%
+  description-es,%
+  %
+  organization-en,%
+  title-en,%
+  country-en,%
+  description-en%
+}
+
+\DeclareDatamodelEntryfields[thesis]{%
+  author,%
+  date,%
+  organization,%
+  title,%
+  note,%
+  level,%
+  %
+  organization-es,%
+  title-es,%
+  note-es,%
+  %
+  organization-en,%
+  title-en,%
+  note-en%
+}

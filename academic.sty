@@ -1,0 +1,410 @@
+%% start of file `academic.sty'.
+
+
+%-------------------------------------------------------------------------------
+%                identification
+%-------------------------------------------------------------------------------
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{academic}[2017/07/01 v1 modern curriculum vitae and letter style scheme: academic]
+
+%-------------------------------------------------------------------------------
+% Definitions
+%-------------------------------------------------------------------------------
+
+%switches for information
+\newif\ifdetails\detailsfalse
+\newif\if@citeall
+
+%-------------------------------------------------------------------------------
+% Options
+%-------------------------------------------------------------------------------
+\RequirePackage{pgfkeys}
+\RequirePackage{pgfopts}
+
+% Package options
+\def\unknown@packageoptions{}
+\def\@load@style{}
+
+\pgfkeys{%
+  /academic/.cd,
+  citeall/.is if={@citeall},
+  citeall/.default=true,
+  %
+  details/.is if={details},
+  details/.default=true,
+  %
+  style/.store in=\@load@style,
+  style/.default=academic,
+  %
+  % unknown keys are assumed to be options to be passed to the amc package
+  .unknown/.code={\edef\unknown@packageoptions{\unknown@packageoptions,\pgfkeyscurrentname=#1}},
+}
+
+% defaults
+\pgfkeys{%
+  /academic/.cd,
+  % put defaults here
+  citeall,
+  details = false,
+}
+
+% process options key-value
+\ProcessPgfPackageOptions{/academic}
+\ifdefempty{\unknown@packageoptions}%
+  {}%
+  {\PackageWarning{academic}{Unknown options: '\unknown@packageoptions'}}
+
+
+%https://tex.stackexchange.com/a/131413/7561
+\newcommand*\csnewcommand{\@star@or@long\csnew@command}
+\newcommand*\csnew@command[1]{\expandafter\new@command\csname#1\endcsname}
+\newcommand*\recsnewcommand{\@star@or@long\recsnew@command}
+\newcommand*\recsnew@command[1]{\expandafter\renew@command\csname#1\endcsname}
+
+%-------------------------------------------------------------------------------
+% Load style
+%-------------------------------------------------------------------------------
+
+% We need to load before patching the definitions
+\ifdefempty{\@load@style}{\PackageWarning{academic}{No style to load}}{
+  \moderncvstyle{\@load@style}
+}
+
+
+%-------------------------------------------------------------------------------
+% Multilanguage support
+%-------------------------------------------------------------------------------
+
+% http://tex.stackexchange.com/a/42791/7561
+\newcommand{\newlcommand}[1]{%
+  \newcommand#1{%
+    \@ifundefined{\string#1\languagename}
+    {``No def of \texttt{\string#1} for \languagename''}
+    {\@nameuse{\string#1\languagename}}%
+  }%
+}
+\newcommand{\addtolanguagecommand}[3]{%
+  \@namedef{\string#1#2}{#3}}
+
+\pgfkeys{
+  /mlcommands/.is family, /mlcommands,
+  command/.code={\def\langcmd{#1}},
+  .unknown/.code = {%    
+    \expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\addtolanguagecommand\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter\expandafter
+    {\expandafter\expandafter\expandafter\langcmd\expandafter\expandafter\expandafter}%
+    \expandafter\expandafter\expandafter{\expandafter\pgfkeyscurrentname\expandafter}\expandafter
+    {#1}
+  }%
+}
+
+\newcommand{\newmlcommand}[2][]{%
+  \newlcommand#2%
+  \pgfkeys{/mlcommands, command=#2, #1}%
+}
+
+% How to use
+%\newlanguagecommand{\uno}
+%\addtolanguagecommand{\uno}{english}{one}
+%\addtolanguagecommand{\uno}{french}{une}
+% or
+% \newmlcommand[english=one, french=une]{\uno}
+
+% Create long names for languages, this reuses the code from cv.bbx
+% fixme: merge both definitions (here and cv.bbx)
+\pgfkeys{
+  /shortlan/.is family, /shortlan,
+  .unknown/.code = {
+     \expandafter\edef\csname @cv@short@#1\endcsname{\pgfkeyscurrentname}
+     \expandafter\expandafter\expandafter\edef\expandafter\csname @cv@long@\pgfkeyscurrentname\endcsname{#1}
+  }
+}
+%\pgfkeys{
+%  /shortlan/.is family, /shortlan,
+%  .unknown/.code = {
+%    \expandafter\edef\csname @cv@short@#1\endcsname{\pgfkeyscurrentname}
+%  }
+%}
+% handler to create the keys
+\def\babelshortnames#1{\pgfkeys{/shortlan, #1}}
+% directly obtain the short name
+\newcommand{\shortlanguagename}{\csname @cv@short@\languagename\endcsname}
+\newcommand{\longlanguagename}[1]{\csname @cv@long@#1\endcsname}
+
+% declare default languages
+% \babelshortnames{en=english, es=spanish}
+% or imported to be in sync with cv.bbx
+\input{setlanguages.sty}
+
+% use a select language with short name instead of default long one
+\newcommand{\selectshortlanguage}[1]{%
+  \edef\mylang{\longlanguagename{#1}}%
+  \expandafter\selectlanguage\expandafter{\mylang}%
+}
+
+%-------------------------------------------------------------------------------
+% Academic drivers and sorting to use with this style
+%-------------------------------------------------------------------------------
+
+%\RequirePackage[tools={study, position, course, thesis, project, cvmisc}, bibstyle=numeric-comp]{biblatex-multiple-dm}
+%\RequirePackage[tools={cv, numeric-comp}, bibstyle=numeric-comp]{biblatex-multiple-dm}
+
+% bibliography with mutiple entries
+
+% If there is no custom datamodel, load defaul cv.dbx
+\IfFileExists{cv-\@load@style.dbx}%
+  {\def\@load@datamodel{cv-\@load@style}}%
+  {\def\@load@datamodel{cv}}
+  
+\IfFileExists{cv-\@load@style.bbx}%
+{\def\@load@bibstyle{cv-\@load@style}}%
+{%
+  \def\@load@bibstyle{cv}%
+  \PackageWarning{academic}{The bibstyle 'cv-\@load@style.bbx' wasn't found. I'm loading the default 'cv.bbx' instead.}%
+}
+
+
+\RequirePackage[backend=biber, citestyle=numeric-comp, bibstyle=\@load@bibstyle, datamodel=\@load@datamodel, sorting=ymdtn, maxbibnames=99, defernumbers=true, giveninits=true, sortcites]{biblatex}
+
+% Patch endyears that are not declared
+% http://tex.stackexchange.com/a/327884/7561
+\DeclareSourcemap{
+  \maps[datatype=bibtex]{
+    \map{
+      \pertype{study}
+      \pertype{position}
+      \pertype{project}
+      \pertype{course}
+      \pertype{thesis}
+      \pertype{committee}
+      \pertype{cvmisc}
+      \step[fieldsource=date, match=\regexp{\A([0-9]{4}-[0-9]{2}-[0-9]{2})\Z}, replace=\regexp{$1/$1}]
+      \step[fieldsource=date, match=\regexp{\A([0-9]{4}-[0-9]{2})\Z}, replace=\regexp{$1/$1}]
+      \step[fieldsource=date, match=\regexp{\A([0-9]{4})\Z}, replace=\regexp{$1/$1}]
+    }
+  }
+}
+
+% Custom sort to include month and endyear
+\DeclareSortingScheme{ymdtn}{
+  \sort{
+    \field{presort}
+  }
+  \sort[final]{
+    \field{sortkey}
+  }
+  \sort[direction=descending]{
+    \field{sortyear}
+    \field{endyear}
+    \literal{9999}
+  }
+  \sort[direction=descending]{
+    \field{sortyear}
+    %    \field{endyear}
+    \field{year}
+    \literal{9999}
+  }
+  \sort[direction=descending]{
+    \field[padside=left,padwidth=2,padchar=0]{month}
+    \literal{99}
+  }
+  \sort[direction=descending]{
+    \field[padside=left,padwidth=2,padchar=0]{day}
+    \literal{99}
+  }
+  \sort{
+    \field{sorttitle}
+  }
+  \sort[direction=descending]{
+    \field[padside=left,padwidth=4,padchar=0]{volume}
+    \literal{9999}
+  }
+  \sort{
+    \field{sortname}
+    \field{author}
+    \field{editor}
+    \field{translator}
+    \field{sorttitle}
+    \field{title}
+  }
+}
+
+% patch for bold name in bibliography
+\def\makenamesetup{%
+  \def\bibnamedelima{~}%
+  \def\bibnamedelimb{ }%
+  \def\bibnamedelimc{ }%
+  \def\bibnamedelimd{ }%
+  \def\bibnamedelimi{ }%
+  \def\bibinitperiod{.}%
+  \def\bibinitdelim{~}%
+  \def\bibinithyphendelim{.-}}    
+\newcommand*{\makename}[2]{\begingroup\makenamesetup\xdef#1{#2}\endgroup}
+
+\renewcommand{\mkbibnamegiven}[1]{%
+  \ifboolexpr{ ( test {\ifdefequal{\bld@firstname}{\namepartgiven}} or test {\ifdefequal{\bld@firstinit}{\namepartgiven}} ) and test {\ifdefequal{\bld@lastname}{\namepartfamily}} }
+  {\mkbibbold{#1}}{#1}%
+}
+
+\renewcommand{\mkbibnamefamily}[1]{%
+  \ifboolexpr{ ( test {\ifdefequal{\bld@firstname}{\namepartgiven}} or test {\ifdefequal{\bld@firstinit}{\namepartgiven}} ) and test {\ifdefequal{\bld@lastname}{\namepartfamily}} }
+  {\mkbibbold{#1}}{#1}%
+}
+
+
+\newcommand*{\boldname}[3]{%
+  \def\bld@lastname{#1}%
+  \def\bld@firstname{#2}%
+  \def\bld@firstinit{#3}}
+
+\boldname{}{}{}
+
+% We need to tell biblatex to check for all entries
+\if@citeall
+\nocite{*}
+\fi
+
+
+%% Patch the bibliography
+%
+%% lets remove the brackets
+%\DeclareFieldFormat{labelnumberwidth}{#1.}
+%
+%% http://tex.stackexchange.com/a/123809/7561
+%\defbibenvironment{bibliography}{
+%\list
+%  {\printtext[labelnumberwidth]{% label format from numeric.bbx
+%      \printfield{labelprefix}%
+%      \printfield{labelnumber}}}
+%  {
+%    \ifthenelse{\equal{\@load@style}{banking}}{%
+%      \setlength{\topsep}{0pt}%
+%%      \setlength{\leftmargin}{2em}%
+%      \setlength{\labelwidth}{1.5em}%
+%      \setlength{\labelsep}{\separatorcolumnwidth}%
+%%      \setlength{\itemindent}{0em}%
+%      \leftmargin\labelwidth%
+%      \advance\leftmargin\labelsep%
+%    }{
+%      \setlength{\topsep}{0pt}%
+%      \setlength{\labelwidth}{\hintscolumnwidth}%
+%      \setlength{\labelsep}{\separatorcolumnwidth}%
+%      \leftmargin\labelwidth%
+%      \advance\leftmargin\labelsep%
+%    }%
+%%    \setlength{\topsep}{0pt}% layout parameters from moderncvstyleclassic.sty
+%%    \setlength{\labelwidth}{\hintscolumnwidth}%
+%%    \setlength{\labelsep}{\separatorcolumnwidth}%
+%%    \leftmargin\labelwidth%
+%%    \advance\leftmargin10pt%
+%%    \advance\leftmargin\labelsep
+%  }%
+%  \sloppy\clubpenalty4000\widowpenalty4000}
+%{\endlist}
+%{\item}
+%
+%% New environment withouth the list indent
+%\defbibenvironment{nobibenv}{%
+%  \list{}{%
+%    \ifboolexpr{ (test{\ifdefstring{\@load@style}{classic}} or test{\ifdefstring{\@load@style}{casual}}) }{%
+%      \setlength{\topsep}{0pt}%
+%      \setlength{\labelwidth}{\hintscolumnwidth}%
+%      \setlength{\labelsep}{\separatorcolumnwidth}%
+%      \setlength{\leftmargin}{0pt}%
+%    }{%
+%    \ifthenelse{\equal{\@load@style}{oldstyle}}{%
+%      \setlength{\topsep}{0pt}%
+%      \setlength{\labelwidth}{\hintscolumnwidth}%
+%      \setlength{\labelsep}{\separatorcolumnwidth}%
+%      \leftmargin\labelwidth%
+%      \advance\leftmargin\labelsep%
+%    }{%
+%    \ifthenelse{\equal{\@load@style}{banking}}{%
+%      \setlength{\topsep}{0pt}%
+%      \setlength{\labelwidth}{0pt}%
+%      \setlength{\labelsep}{0pt}%
+%      \setlength{\leftmargin}{0pt}%
+%    }{
+%      \setlength{\topsep}{0pt}%
+%      \setlength{\labelwidth}{\hintscolumnwidth}%
+%      \setlength{\labelsep}{\separatorcolumnwidth}%
+%      \setlength{\leftmargin}{0pt}%
+%    }%
+%    }%
+%    }%
+%    \setlength{\parsep}{0pt}%
+%  }%
+%}%
+%{\endlist}
+%{\item}
+
+%-------------------------------------------------------------------------------
+% Factory for the printbibliography replacements
+%-------------------------------------------------------------------------------
+
+\newcommand{\defprint}[3][env=nobibenv]{%
+  \csdef{print#3}[##1]{%
+    \letcs\refname{\abx@str @#3}%
+    \letcs\bibname{\abx@str @#3}%
+    \printbibliography[#1, type=#2, ##1]%
+    \letcs\refname{\abx@str @references}%
+    \letcs\bibname{\abx@str @bibliography}
+  }%
+}
+
+\defprint{course}{courses}
+\defprint{study}{studies}
+\defprint{position}{positions}
+\defprint{thesis}{theses}
+\defprint[resetnumbers=true]{project}{projects}
+\defprint{cvmisc}{cvmiscs}
+
+%-------------------------------------------------------------------------------
+% Patching moderncv
+%-------------------------------------------------------------------------------
+
+%\RequirePackage{xpatch}
+%% Patch blank printing
+%\newcommand{\ifnoprint}[3]{%
+%  \setbox0=\hbox{#1\unskip}\ifdim\wd0=0pt%
+%  #2\else#3\fi%
+%}
+
+% Patch cventry for better blank support
+%\xpatchcmd{\cventry}%
+%{\ifthenelse{\equal{#4}{}}}%
+%{\ifnoprint{#4}}%
+%{}{\PackageWarning{academic}{Error patching \noexpand\cventry}}%
+%
+%\xpatchcmd{\cventry}%
+%{\ifthenelse{\equal{#5}{}}}%
+%{\ifnoprint{#5}}%
+%{}{\PackageWarning{academic}{Error patching \noexpand\cventry}}%
+%
+%\xpatchcmd{\cventry}%
+%{\ifthenelse{\equal{#6}{}}}%
+%{\ifnoprint{#6}}%
+%{}{\PackageWarning{academic}{Error patching \noexpand\cventry}}%
+%
+%% Patch the comments on the entries to avoid spurious white space
+%\xpatchcmd{\cventry}%
+%{\ifx}%
+%{\ifdetails\ifx}%
+%{}{\PackageWarning{academic}{Error patching \noexpand\cventry}}%
+%
+%\xpatchcmd{\cventry}%
+%{\fi}%
+%{\fi\fi}%
+%{}{\PackageWarning{academic}{Error patching \noexpand\cventry}}%
+
+% Patch socials
+\RenewDocumentCommand{\social}{O{}O{}m}{%
+  \ifthenelse{\equal{#2}{}}%
+  {%
+    \ifthenelse{\equal{#1}{linkedin}}{\collectionadd[linkedin]{socials}{\protect\httplink[#3]{www.linkedin.com/in/#3}}}{}%
+    \ifthenelse{\equal{#1}{twitter}} {\collectionadd[twitter]{socials} {\protect\httplink[#3]{www.twitter.com/#3}}} {}%
+    \ifthenelse{\equal{#1}{github}}  {\collectionadd[github]{socials}  {\protect\httplink[#3]{www.github.com/#3}}} {}%
+    \ifthenelse{\equal{#1}{scholar}} {\collectionadd[scholar]{socials} {\protect\httplink[Google Scholar]{http://scholar.google.com/citations?user=#3}}} {}%
+  }
+  {\collectionadd[#1]{socials}{\protect\httplink[#3]{#2}}}}
+
+\endinput

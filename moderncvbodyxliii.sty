@@ -1,0 +1,97 @@
+%-------------------------------------------------------------------------------
+%                identification
+%-------------------------------------------------------------------------------
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{moderncvbodyxliii}
+
+
+%-------------------------------------------------------------------------------
+%                required packages
+%-------------------------------------------------------------------------------
+
+% load oldstyle body
+\moderncvbody{4}
+
+\RequirePackage{tikz}
+\RequirePackage{xcolor}
+
+\definecolor{white}{RGB}{255,255,255}
+
+\definecolor{darkgray}{HTML}{333333}
+\definecolor{gray}{HTML}{4D4D4D}
+\definecolor{lightgray}{HTML}{999999}
+
+\definecolor{green}{HTML}{C2E15F}
+\definecolor{orange}{HTML}{FDA333}
+\definecolor{purple}{HTML}{D3A4F9}
+\definecolor{red}{HTML}{FB4485}
+\definecolor{blue}{HTML}{6CE0F1}
+\definecolor{yellow}{HTML}{B3B300}
+\definecolor{bluegray}{HTML}{669999}
+\definecolor{pink}{HTML}{FF9999}
+\definecolor{navy}{HTML}{002B80}
+\definecolor{lime}{HTML}{66FF66}
+
+
+
+\ifdefined\@cv@print
+\colorlet{green}{gray}
+\colorlet{orange}{gray}
+\colorlet{purple}{gray}
+\colorlet{red}{gray}
+\colorlet{blue}{gray}
+\colorlet{fillheader}{white}
+\colorlet{header}{gray}
+\else
+\colorlet{fillheader}{gray}
+\colorlet{header}{white}
+\fi
+\colorlet{textcolor}{gray}
+\colorlet{headercolor}{gray}
+
+
+%%%%%%%%%%%%%
+% Structure %
+%%%%%%%%%%%%%
+\RequirePackage{parskip}
+
+\newcounter{colorCounter}
+\def\@sectioncolor#1#2#3{%
+  {%
+    \color{%
+      \ifcase\value{colorCounter}%
+      blue\or%
+      red\or%
+      orange\or%
+      green\or%
+      bluegray\or%
+      pink\or%
+      yellow\or%
+      navy\or%
+      lime\or%
+      purple\else%
+      color1\fi%
+    } #1#2#3%
+  }%
+  \stepcounter{colorCounter}%
+}
+
+%-------------------------------------------------------------------------------
+%                overall body definition
+%-------------------------------------------------------------------------------
+% fonts
+\renewcommand*{\sectionfont}{\Large\bfseries\upshape}
+\renewcommand*{\subsectionfont}{\large\bfseries\itshape}
+\renewcommand*{\hintfont}{\bfseries}
+
+
+\renewcommand*{\sectionstyle}[1]{%
+  \begingroup%
+  \edef\x{\endgroup{\noexpand\sectionfont\noexpand\color{color1}\noexpand\@sectioncolor #1}}%
+  \x%
+}
+\renewcommand*{\subsectionstyle}[1]{{\subsectionfont\textcolor{color1}{#1}}}
+\renewcommand*{\hintstyle}[1]{{\hintfont\textcolor{color0}{#1}}}
+
+
+\endinput

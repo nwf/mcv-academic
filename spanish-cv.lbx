@@ -1,0 +1,61 @@
+\ProvidesFile{spanish-cv.lbx}
+\InheritBibliographyExtras{spanish}
+
+% Bibliography strings
+\NewBibliographyString{
+  duration,
+  years,
+  year,
+  pi,
+  ai,
+  professor,
+  researcher,
+  assisprofessor, 
+  assocprofessor,
+  present,
+  studies,%
+  positions,%
+  theses, 
+  undergrad, 
+  master, 
+  doctor, 
+  degree,%
+  courses,%
+  cvmiscs%
+}
+
+\DeclareBibliographyStrings{%
+  inherit = {spanish},
+  duration = {{duraci\'on}{duraci\'on}},
+  years = {{a\~nos}{a\~nos}},
+  year = {{a\~no}{a\~no}},
+  pi = {{Investigador Principal}{Investigador Principal}},
+  ai = {{Investigador Alterno}{Investigador Alterno}},
+  professor = {{Profesor}{Profesor}},
+  assisprofessor = {{Profesor Asistente}{Profesor Asistente}},
+  assocprofessor = {{Profesor Asociado}{Profesor Asociado}},
+  researcher = {{Investigador}{Investigador}},
+  %
+  present = {{presente}{pres\adddot}},
+  %
+  studies = {{Educaci\'on}{Educaci\'on}},
+  positions = {{Posiciones}{Posiciones}},
+  %
+  theses = {{Tesis}{Tesis}},
+  degree = {{Grado}{Grado}},
+  undergrad = {{Licenciatura}{Licenciatura}},
+  master = {{Maestr\'ia}{Maestr\'ia}},
+  doctor = {{Doctoral}{Doctoral}},
+  %
+  courses = {{Cursos}{Cursos}},%
+  %
+  cvmiscs = {{Miscelanea}{Miscelanea}},
+}
+
+
+\DeclareBibliographyExtras{%
+  \renewcommand*{\bibrangedash}{--}
+  \renewcommand*{\bibdatedash}{--}
+}
+
+\endinput

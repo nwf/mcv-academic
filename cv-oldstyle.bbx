@@ -1,0 +1,69 @@
+\ProvidesFile{cv-oldstyle.bbx}
+
+\RequireBibliographyStyle{cv}
+
+%-------------------------------------------------------------------------------
+% MCV Macros
+%-------------------------------------------------------------------------------
+\renewcommand*{\cventry}[7][.25em]{%
+  \savebox{\cventryyearbox}{%
+    \hspace*{2\separatorcolumnwidth}%
+    #2}%
+  \setlength{\cventrytitleboxwidth}{\widthof{\usebox{\cventryyearbox}}}%
+  \setlength{\cventrytitleboxwidth}{\maincolumnwidth-\cventrytitleboxwidth}%
+  \begin{minipage}[t]{\maincolumnwidth}%
+    \parbox[t]{\cventrytitleboxwidth}{%
+      #3%
+    }%
+    \usebox{\cventryyearbox}%
+  \end{minipage}\strut%
+  #7%
+  \par\addvspace{#1}}
+
+%-------------------------------------------------------------------------------
+% Drivers
+%-------------------------------------------------------------------------------
+
+\DeclareBibliographyDriver{cventry}{%
+  \usebibmacro{begentry}%
+  \usebibmacro{cventry}%
+  {\usebibmacro{range-date}}%
+  {%
+    \ifnameundef{author}{}{\usebibmacro{author}\newunit}%
+    \printmlfield{title}%
+    \newunitpunct%
+    \printmlfield{organization}%
+    \iffieldundef{country}
+      {}
+      {\setunit*{\addcomma\space}\printmlfield{country}}%
+    \newunitpunct%
+    \ifmlfieldundef{level}{}{\usebibmacro{level}\newunitpunct}%
+    \usebibmacro{note}%
+%    \setunit{}\printtext{}%
+  }%
+  {}%
+  {}%
+  {}%
+  {\usebibmacro{description}}
+  \usebibmacro{cvfinentry}%
+}
+
+%-------------------------------------------------------------------------------
+% Patch the bibliography
+%-------------------------------------------------------------------------------
+
+% New environment withouth the list indent
+\defbibenvironment{nobibenv}{%
+  \list{}{%
+    \setlength{\topsep}{0pt}%
+    \setlength{\labelwidth}{\hintscolumnwidth}%
+    \setlength{\labelsep}{\separatorcolumnwidth}%
+    \leftmargin\labelwidth%
+    \advance\leftmargin\labelsep%
+    \setlength{\parsep}{0pt}%
+  }%
+}%
+{\endlist}
+{\item}
+
+\endinput

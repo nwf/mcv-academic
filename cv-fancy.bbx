@@ -1,0 +1,129 @@
+\ProvidesFile{cv-fancy.bbx}
+
+\RequireBibliographyStyle{cv}
+
+%-------------------------------------------------------------------------------
+% MCV Macros
+%-------------------------------------------------------------------------------
+\RenewDocumentCommand{\section}{sm}{%
+  \addvspace{2.5ex}%
+  \phantomsection{}% reset the anchor for hyperrefs
+  \addcontentsline{toc}{section}{#2}%
+  \noindent\rlap{\@cvitem{\raggedleft\sectionstyle{#2}}{}}%
+  \nobreak\global\@afterheading\global\@aftersectiontrue\ignorespaces\vspace{-1pt}}
+
+\RenewDocumentCommand{\subsection}{sm}{%
+  \if@aftersection%
+  \par\ignorespaces\else\vspace{5pt}\fi%
+  \phantomsection{}% reset the anchor for hyperrefs
+  \addcontentsline{toc}{subsection}{#2}%
+  \noindent\rlap{\@cvitem{\if@aftersection\else\@moderncvstrut{4pt}{24pt}\fi\raggedleft\subsectionstyle{#2}}{}}%
+  \nobreak\global\@afterheading\global\@aftersectiontrue\ignorespaces\vspace{-6pt}}
+
+
+\setlength{\cvitemskip}{.5ex}
+\renewcommand*{\cventry}[7][\cvitemskip]{%
+  \savebox{\cventryyearbox}{\hspace*{2\separatorcolumnwidth}#2}%
+  \setlength{\cventrytitleboxwidth}{\widthof{\usebox{\cventryyearbox}}}%
+  \setlength{\cventrytitleboxwidth}{\maincolumnwidth-\cventrytitleboxwidth}%
+  \cvitem[#1]{}{%
+    \parbox[t]{\cventrytitleboxwidth}{%
+      #3 #7%
+    }%
+    \usebox{\cventryyearbox}}%
+}
+
+% underlying command to implement \cvitem, \subsection and \section
+\renewcommand*{\@cvitem}[3][\cvitemskip]{%
+  \arrayrulecolor{color1}%
+  \if@aftersection%
+  \else%
+    \vspace{-6pt}%
+  \fi%
+  \begin{tabular}[t]{@{}p{\hintscolumnwidth}@{\hspace{\separatorcolumnwidth}}|@{\hspace{\separatorcolumnwidth}}p{\maincolumnwidth}@{}}%
+    #2 &#3\vspace{5pt}\\% the spacing needs to be inside the cell for the vertical rule to extend correctly
+  \end{tabular}%
+  \if@aftersection%
+    \vspace{-6pt}%
+  \fi%
+  \global\@aftersectionfalse}
+
+%-------------------------------------------------------------------------------
+% Drivers
+%-------------------------------------------------------------------------------
+
+\DeclareBibliographyDriver{cventry}{%
+  \usebibmacro{begentry}%
+  \usebibmacro{cventry}%
+  {\usebibmacro{range-date}}%
+  {%
+    \ifnameundef{author}{}{\usebibmacro{author}\newunit}%
+    \printmlfield{title}%
+    \newunitpunct%
+    \printmlfield{organization}%
+    \iffieldundef{country}
+      {}
+      {\setunit*{\addcomma\space}\printmlfield{country}}%
+    \newunitpunct%
+    \ifmlfieldundef{level}{}{\usebibmacro{level}\newunitpunct}%
+    \usebibmacro{note}%
+  }%
+  {}%
+  {}%
+  {}%
+  {\usebibmacro{description}}%
+  \usebibmacro{cvfinentry}%
+}
+
+%-------------------------------------------------------------------------------
+% Patch the bibliography
+%-------------------------------------------------------------------------------
+\defbibenvironment{bibliography}{%
+%  \bibliographyhead{\refname}%
+  %    \small%
+  \arrayrulecolor{color1}%
+  \setlength\arrayrulewidth{\separatorrulewidth}%
+  \noindent%
+  \begin{tabular}[t]{@{}p{\hintscolumnwidth}@{\hspace{\separatorcolumnwidth}}|@{\hspace{\separatorcolumnwidth}}p{\maincolumnwidth}@{}}%
+     &%
+    \list{%
+      \printtext[labelnumberwidth]{% label format from numeric.bbx
+      \printfield{labelprefix}%
+      \printfield{labelnumber}}%
+    }{%
+      \setlength{\topsep}{0pt}%
+      \setlength{\labelwidth}{1.5em}%
+      \setlength{\labelsep}{.5em}%
+      \leftmargin\labelwidth%
+      \advance\leftmargin\labelsep%
+    }%
+    \sloppy%
+    \clubpenalty4000%\@clubpenalty \clubpenalty%
+    \widowpenalty4000%
+}%
+{%
+  \endlist%
+  \\%[.5ex]%
+  \end{tabular}%
+%  \par\@aftersectionfalse\ignorespaces%
+}%
+{\item}
+
+% New environment withouth the list indent
+\defbibenvironment{nobibenv}{%
+  \list{}{%
+    \setlength{\topsep}{0pt}%
+    \setlength{\labelwidth}{0pt}%
+    \setlength{\labelsep}{0pt}%
+    \setlength{\leftmargin}{0pt}%
+    \setlength{\parsep}{0pt}%
+    \setlength{\parskip}{0pt}%
+    \sloppy%
+    \clubpenalty4000%\@clubpenalty \clubpenalty%
+    \widowpenalty4000%
+  }%
+}%
+{\endlist}
+{\item}
+
+\endinput
