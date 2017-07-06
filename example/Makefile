@@ -1,4 +1,7 @@
-# Our languages
+# Programs
+MAKE = make
+
+# Our languages, styles, and patterns
 LANGS = en es pt
 STYLES = classic oldstyle fancy banking casual academic friggeri
 PATTERNS := $(foreach style, $(STYLES), $(foreach lang, $(LANGS), $(style)-$(lang)))
@@ -9,10 +12,16 @@ SOURCE = $(NAME: %=%.tex)
 DETAILS = true
 
 # Default make to build these rules instead of files in case they exist
-.PHONY: all clean veryclean $(PATTERNS)
+.PHONY: all clean veryclean $(PATTERNS) $(LANGS) $(STYLES)
 
 # Rules
 all: $(PATTERNS)
+
+$(LANGS): 
+	@$(MAKE) $(foreach style, $(STYLES), $(style)-$@)
+
+$(STYLE): 
+	@$(MAKE) $(foreach lang, $(LANGS), $@-$(lang))
 
 # we need to clean before compiling a new language
 $(PATTERNS): clean	
