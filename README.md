@@ -38,7 +38,7 @@ Go to the `example` folder inside the repository, and execute
 make
 ```
 
-That will execute the example CV and will create two files `example-en.pdf` and `example-es.pdf` (and other auxiliary files).
+That will execute the example CV and will create the files `example-<style>-<lang>.pdf` where `<style>` and `<lang>` are the available styles and languages implemented (and other auxiliary files).
 
 For a particular language, you can execute
 
@@ -46,7 +46,7 @@ For a particular language, you can execute
 make en
 ```
 
-Note that the languages are defined within the `Makefile` and should be the same as the ones defined within the style.
+The same holds for styles too, or the combination of the two. Note that the languages and styles are defined within the `Makefile` and should be the same as the ones defined within the style.
 
 ## Customizing your CV
 
@@ -108,6 +108,14 @@ For more details, read on.
 The main idea of this style is to hold academic CV, as they have several entries of related items. For example, you want to put all your publications, guided theses, talks, etc. Most of the time, you will want to sort them in a given order, or print some of them, or do some strange things.
 
 Moreover, you may want to have all those entries in different languages and you may need to have the same version in different languages. If that is your case, fear no more. This probably help you easing that task.
+
+To use the package you need to load it in the preamble, and pass the `moderncv` style that you want to use using the `style` keyword. Optionally, you can define to use `details=true` or not (as a boolean variable).
+
+```tex
+\usepacakge[style=academic, details]{academic}
+```
+
+by default, `details` it is set to `true`. The available styles are the ones defined within `moderncv`, plus `academic`, that is a minor variation on the `classic` style, and `friggeri` that is a total new style that defines its own header and body.
 
 ## How the style works
 
@@ -224,6 +232,8 @@ create a simpler version that will be used as default
 organization = {Proper name},
 ```
 
+The data model is created automatically based on the installed languages, and it will localized the corresponding string fields. Note that it will use the defined languages in the style, and not the ones defined by the `babel` package alone. See the [localization](#localization) for more details.
+
 ### Defined `bibstrings`
 
 Some fields allow to use `bibstrings` instead of a given string.
@@ -257,9 +267,9 @@ Note that all these have translations to the other languages as well (here are t
 
 ### Within the style
 
-Currently the style supports two languages: `english` and `spanish`. I'm planing on extending it to other languages when I have time (but contributions for the translations are welcomed).
+Currently the style supports three languages: `english`, `spanish`, and `portuguese`. I'm planing on extending it to other languages when I have time (but contributions for the translations are welcomed).
 
-The languages are defined in `cv.bbx` and `moderncvstyleacademic.sty` by declaring the supported languages through
+The languages are defined in `language-cv.lbx` where the `bibstrings` are localized. The languages declared automatically create the custom entries in the data model by declaring the supported languages through
 
 ```tex
 \babelshortnames{en=english, es=spanish}
@@ -267,7 +277,7 @@ The languages are defined in `cv.bbx` and `moderncvstyleacademic.sty` by declari
 
 That is, a list of pairs `<abreviation>=<languagename>`. These languages are not necessarily the same as the ones declared in the main document.
 
-The declaration needs to be repeated as the processing of the styles (`.bbx`) is done at a different time than the `moderncvstyle`, so the macro is not available later. Thus, the robust solution is to use `setlanguages.sty` configuration file in which this macro is declared.
+The robust solution is to use `setlanguages.sty` configuration file in which this macro is declared, and later this file is read within the `cv.bbx` style.
 
 ### Within your CV
 
@@ -324,15 +334,18 @@ Note that all these macros support the same options as `\printbibliography`.
 
 # Makefile
 
-The style provides an example `Makefile` (inside the `example` folder) to show a way to generate automatically the CV in all the languages.
+The style provides an example `Makefile` (inside the `example` folder) to show a way to generate automatically the CV in all the languages and styles.
 
 This write up doesn't aim to teach you `Makefile` syntax, but if you want a quick way to use this file for your projects you need to change the following parts
 
 ```makefile
 # Our languages separated by a space
 # We use the shortnames because it is easier to read, but you can use the long names
-# but you will need to update `\defaultopts` in the `INPUT` variable
-LANGS = en es
+# but you will need to update the macros in the `INPUT` variable
+# Supported languages
+LANGS = en es pt
+# Supported styles
+STYLES = classic oldstyle fancy banking casual academic friggeri
 # Default source name
 NAME = example
 # Wheter to show details or not
