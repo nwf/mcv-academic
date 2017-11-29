@@ -23,7 +23,7 @@
 \DeclareDatamodelFields[type=list, datatype=literal]{dates}
 
 % Entries
-\DeclareDatamodelEntrytypes{course, cvmisc, position, project, study, thesis, presentation}
+\DeclareDatamodelEntrytypes{course, cvmisc, position, project, study, cvthesis, presentation}
 
 % Data models
 \DeclareLocalizedDatamodelEntryfields[course]{%
@@ -73,7 +73,7 @@
   note%
 }
 
-\DeclareLocalizedDatamodelEntryfields[thesis]{%
+\DeclareLocalizedDatamodelEntryfields[cvthesis]{%
   author,%
   date,%
   organization,%

@@ -169,7 +169,7 @@ The style defines the following entries (or types of data)
   * `year`: the starting year of the project.  This field is an integer number representing the year.
   * `month`: the starting month of the project.  This field should be a month that `biblatex` can understand (that is, a number or a three letter month representation).
 
-- **Thesis**.  Refers to the theses you guided.  It supports the following fields
+- **cvthesis**.  Refers to the theses you guided.  It supports the following fields
   * `author`: the student (author) of the theses that you guided.  This field is a string.
   * `title`: the title of the thesis.  This field is a string.
   * `date`: the date of the thesis.  This field is a date from `biblatex`.
