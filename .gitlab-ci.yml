@@ -6,7 +6,7 @@ before_script:
   - mkdir -p $LOCALTEX  
 
 build:
-  image: adnrv/texlive-tools
+  image: adnrv/texlive:tools
   script:
     # link these files in the local texmf
     - ln -s `pwd` $LOCALTEX/mcv-academic
