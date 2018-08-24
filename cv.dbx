@@ -17,11 +17,14 @@
   date%
 }
 
+\DeclareDatamodelFields[type=list, datatype=literal]{dates}
+
 % Entries
 \DeclareDatamodelEntrytypes{course, cvmisc, position, project, study, thesis}
 
 % Data models
 \DeclareLocalizedDatamodelEntryfields[course]{%
+  dates,%
   date,%
   organization,%
   title,%
@@ -29,6 +32,7 @@
 }
 
 \DeclareLocalizedDatamodelEntryfields[cvmisc]{%
+  dates,%
   date,%
   title,%
   description%
@@ -43,13 +47,13 @@
 }
 
 \DeclareLocalizedDatamodelEntryfields[project]{
-  number,
-  title,
-  funding,
+  number,%
+  title,%
+  funding,%
   role,%
-  number,
-  period,
-  month,
+  number,%
+  period,%
+  month,%
   year%
 }
 

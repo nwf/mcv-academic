@@ -8,6 +8,9 @@
 % Create short names for languages
 \RequirePackage{pgfkeys}
 
+% Manipulate the strings
+\RequirePackage{xstring}
+
 %-------------------------------------------------------------------------------
 % Language handlers
 %-------------------------------------------------------------------------------
@@ -36,11 +39,16 @@
 %-------------------------------------------------------------------------------
 % Drivers
 %-------------------------------------------------------------------------------
-
 \DeclareBibliographyDriver{cventry}{%
   \usebibmacro{begentry}%
   \usebibmacro{cvitem}%
-  {\usebibmacro{range-date}}%
+  {% print the date or the list-of-dates
+    \iffieldundef{year}{%
+      \printlist{dates}%
+    }{%
+      \usebibmacro{range-date}%
+    }%
+  }
   {%
     \ifnameundef{author}{}{\usebibmacro{author}\newunit}%
     \printmlfield{title}%
@@ -91,6 +99,13 @@
 \DeclareFieldFormat{organization}{\mkbibemph{#1}}
 \DeclareFieldFormat{note}{\mkbibparens{#1\adddot}}
 \DeclareFieldFormat{details}{\ifdetails\small#1\fi}
+
+\DeclareListFormat{dates}{%
+  \usebibmacro{string-to-date}{#1}%
+  \ifthenelse{\value{listcount}<\value{liststop}}
+    {\addcomma\space}
+    {}
+}
 
 % Specific
 \DeclareFieldFormat[study]{title}{\mkbibbold{#1}}
@@ -186,6 +201,46 @@
 \newbibmacro*{cvfinentry}{}
 
 % Common formats
+% Does the same thing as range-date but with a string instead
+\newbibmacro*{string-to-date}[1]{%
+  % localize the year macrso to avoid problems
+  \begingroup%
+  % Do we have a range?
+  \IfSubStr{#1}{/}%
+  {% Is range
+    \StrCut{#1}{/}\first\second%
+    \usebibmacro{string-to-single-date}{\first}%
+    \ifdefempty{\second}{%
+      \edef\abx@field@endyear{}
+    }{%
+     \usebibmacro{string-to-single-date}[end]{\second}%
+    }% 
+  }%
+  {% Is single date
+    \usebibmacro{string-to-single-date}{#1}%
+  }%
+  \usebibmacro{range-date}%
+  \endgroup%
+}
+
+\newbibmacro*{string-to-single-date}[2][]{%
+  % if string (#2) is emtpy do nothing
+  \ifdefempty{#2}{}{%
+    % else
+    \IfSubStr{#2}{-}%
+    {%
+      \StrCut{#2}{-}\year\rest%
+      \StrCut{\rest}{-}\month\day%
+      \csedef{abx@field@#1year}{\year}%
+      \csedef{abx@field@#1month}{\month}%
+      \csedef{abx@field@#1day}{\day}%
+    }%
+    {% Just a year in the date
+      \csedef{abx@field@#1year}{#2}%
+    }%
+  }%
+}
+
 \newbibmacro*{range-date}{%
   \iffieldundef{year}%
   {}%
