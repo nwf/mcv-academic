@@ -29,7 +29,7 @@ $(PATTERNS): clean
 	$(eval STYLE = $(firstword $(subst -, ,$@)))
 	$(eval LANG = $(lastword $(subst -, ,$@)))	
 	$(eval INPUT="\def\defaultstyle{$(STYLE)}\def\defaultdetails{$(DETAILS)}\def\defaultopts{\selectshortlanguage{$(LANG)}}\input{$(SOURCE)}")
-	pdflatex -interaction=nonstopmode $(INPUT) -jobname=$(NAME)
+	pdflatex -interaction=nonstopmode $(INPUT) -jobname=$(NAME) || true
 	biber $(NAME)
 	pdflatex -interaction=nonstopmode $(INPUT) -jobname=$(NAME)
 	pdflatex -interaction=nonstopmode $(INPUT) -jobname=$(NAME)
