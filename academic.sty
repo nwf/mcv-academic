@@ -272,35 +272,81 @@
   }
 }
 
-% patch for bold name in bibliography
-\def\makenamesetup{%
-  \def\bibnamedelima{~}%
-  \def\bibnamedelimb{ }%
-  \def\bibnamedelimc{ }%
-  \def\bibnamedelimd{ }%
-  \def\bibnamedelimi{ }%
-  \def\bibinitperiod{.}%
-  \def\bibinitdelim{~}%
-  \def\bibinithyphendelim{.-}}    
-\newcommand*{\makename}[2]{\begingroup\makenamesetup\xdef#1{#2}\endgroup}
-
-\renewcommand{\mkbibnamegiven}[1]{%
-  \ifboolexpr{ ( test {\ifdefequal{\bld@firstname}{\namepartgiven}} or test {\ifdefequal{\bld@firstinit}{\namepartgiven}} ) and test {\ifdefequal{\bld@lastname}{\namepartfamily}} }
-  {\mkbibbold{#1}}{#1}%
+% Bolding names using hashes
+% https://tex.stackexchange.com/a/416416/7561
+\RequirePackage{xpatch}
+\def\hlblx@ensuredocument#1{%
+  \ifx\@onlypreamble\@notprerr
+  #1%
+  \else
+  \AtBeginDocument{#1}%
+  \fi
 }
 
-\renewcommand{\mkbibnamefamily}[1]{%
-  \ifboolexpr{ ( test {\ifdefequal{\bld@firstname}{\namepartgiven}} or test {\ifdefequal{\bld@firstinit}{\namepartgiven}} ) and test {\ifdefequal{\bld@lastname}{\namepartfamily}} }
-  {\mkbibbold{#1}}{#1}%
+\def\hlblx@bibfile@name{\jobname -boldnames.bib}
+\newwrite\hlblx@bibfile
+\immediate\openout\hlblx@bibfile=\hlblx@bibfile@name
+
+\newcounter{hlblx@name}
+\setcounter{hlblx@name}{0}
+
+\newcommand*{\hlblx@writenametobib}[1]{%
+  \stepcounter{hlblx@name}%
+  \edef\hlblx@tmp@nocite{%
+    \noexpand\hlblx@ensuredocument{%
+      \noexpand\setbox0\noexpand\vbox{%
+        \noexpand\hlblx@getmethehash{hlblx@name@\the\value{hlblx@name}}}}%
+  }%
+  \hlblx@tmp@nocite
+  \immediate\write\hlblx@bibfile{%
+    @misc{hlblx@name@\the\value{hlblx@name}, author = {\unexpanded{#1}}, %
+      options = {dataonly=true},}%
+  }%
 }
 
+\AtEndDocument{%
+  \closeout\hlblx@bibfile}
 
+\addbibresource{\hlblx@bibfile@name}
+
+\newcommand*{\hlbxl@boldhashes}{}
+\DeclareNameFormat{hlblx@hashextract}{%
+  \xifinlist{\thefield{hash}}{\hlbxl@boldhashes}
+  {}
+  {\listxadd{\hlbxl@boldhashes}{\thefield{fullhash}}}}
+
+\DeclareCiteCommand{\hlblx@getmethehash}
+{}
+{\printnames[hlblx@hashextract][1-999]{author}}
+{}
+{}
+
+\newbibmacro*{name:bold}[2]{%
+  \def\do##1{\iffieldequalstr{hash}{##1}{\bfseries\listbreak}{}}%
+  \dolistloop{\hlbxl@boldhashes}%
+}
+
+\xpretobibmacro{name:family}{\begingroup\usebibmacro{name:bold}{#1}{#2}}{}{}
+\xpretobibmacro{name:given-family}{\begingroup\usebibmacro{name:bold}{#1}{#2}}{}{}
+\xpretobibmacro{name:family-given}{\begingroup\usebibmacro{name:bold}{#1}{#2}}{}{}
+\xpretobibmacro{name:delim}{\begingroup\normalfont}{}{}
+
+\xapptobibmacro{name:family}{\endgroup}{}{}
+\xapptobibmacro{name:given-family}{\endgroup}{}{}
+\xapptobibmacro{name:family-given}{\endgroup}{}{}
+\xapptobibmacro{name:delim}{\endgroup}{}{}
+
+
+% User macros
+\newcommand*{\addboldnames}{\forcsvlist\hlblx@writenametobib}
+\newcommand*{\resetboldnames}{\def\hlbxl@boldhashes{}}
+
+% Mantained for backwards compatibility
 \newcommand*{\boldname}[3]{%
-  \def\bld@lastname{#1}%
-  \def\bld@firstname{#2}%
-  \def\bld@firstinit{#3}}
+  \PackageWarning{academic}{The macro '\protect\boldname' is deprecated.  Use '\protect\addboldnames' to declare the names to bold as a coma-separated-value list, and '\protect\resetboldnames' to clear that list.}
+  \addboldnames{{#2 #1},{#3 #1}}}
 
-\boldname{}{}{}
+
 
 % We need to tell biblatex to check for all entries
 \if@citeall
