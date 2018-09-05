@@ -69,8 +69,12 @@
 \addbibresource{cvdata.bib}
 
 % If you want to make your name bold in the publications or other entries where you are an author
-% Lastname Name Abbrev.
-\boldname{Doe}{John}{J.}
+% Use a coma-separated-value list for example: 
+%   \addboldnames{{John Doe},{J. Doe}}
+% However, for compound family names, it is better to use the format "family-name, given-name" as:
+%   \addboldnames{{Compound Doe, Joe},{Compound Doe, J.},{Doe, J.}}
+% This version requires you to explicitly give all the configurations of the name you want to bold
+\addboldnames{{John Doe},{J. Doe}}
 
 
 %----------------------------------------------------------------------------------
