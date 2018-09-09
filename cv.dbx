@@ -3,7 +3,7 @@
 \DeclareLocalizedDatamodelFields[type=field, datatype=literal]{level, period, title, organization, country, description, funding, role, note}
 
 \DeclareDatamodelFields[type=list, datatype=literal]{
-  number
+  number%
 }
 
 \DeclareDatamodelFields[type=field, datatype=datepart]{

@@ -71,9 +71,15 @@
 \DeclareBibliographyDriver{project}{%
   \usebibmacro{bibindex}%
   \usebibmacro{begentry}%
-  \printmlfield{role}%
-  \newunit%
-  %  \setunit*{\addperiod\space}%
+  \ifnameundef{author}%
+    % if no author is given, print only the role
+    {\printmlfield{role}\newunit}%
+    {% else, print the author and the role in parenthesis, if the latter exists
+      \usebibmacro{author}
+      \ifmlfieldundef{role}{}%
+      {\mkbibparens{\printmlfield{role}}}%
+      \newunit%
+    }%
   \printmlfield{title}%
   \newunit%
   \usebibmacro{funding-project}%
@@ -133,13 +139,15 @@
     \fi%
   }
 }
+
 \DeclareListFormat[project]{number}{%
   \ifnumequal{\value{listcount}}{1}{%
     \ifnumgreater{\value{liststop}}{1}%
-    {Nos.}{No.}%
-  }{}
+    {\bibstring{grantnums}}{\bibstring{grantnum}}%
+    \addnbspace
+  }{}%
   \usebibmacro{list:delim}{#1}%
-  #1\isdot
+  #1\isdot%
   \usebibmacro{list:andothers}%
 }
 
