@@ -87,6 +87,8 @@
   \usebibmacro{period}%
   \newunit%
   \usebibmacro{projdate}%
+  \newunit%
+  \usebibmacro{note}% 
   \usebibmacro{finentry}%
 }
 
@@ -179,7 +181,6 @@
 }
 
 \newbibmacro*{projdate}{%
-  % \mkbibdatelong{year}{month}{}%
   \usebibmacro{range-date}[long]%
 }
 

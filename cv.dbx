@@ -28,14 +28,16 @@
   date,%
   organization,%
   title,%
-  description%
+  description,%
+  note%
 }
 
 \DeclareLocalizedDatamodelEntryfields[cvmisc]{%
   dates,%
   date,%
   title,%
-  description%
+  description,%
+  note%
 }
 
 \DeclareLocalizedDatamodelEntryfields[position]{%
@@ -43,7 +45,8 @@
   organization,%
   title,%
   country,%
-  description%
+  description,%
+  note%
 }
 
 \DeclareLocalizedDatamodelEntryfields[project]{
@@ -54,7 +57,8 @@
   number,%
   period,%
   month,%
-  year%
+  year,%
+  note%
 }
 
 \DeclareLocalizedDatamodelEntryfields[study]{%
@@ -62,7 +66,8 @@
   organization,%
   title,%
   country,%
-  description%
+  description,%
+  note%
 }
 
 \DeclareLocalizedDatamodelEntryfields[thesis]{%
