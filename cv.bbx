@@ -179,7 +179,8 @@
 }
 
 \newbibmacro*{projdate}{%
-  \mkbibdatelong{year}{month}{}%
+  % \mkbibdatelong{year}{month}{}%
+  \usebibmacro{range-date}[long]%
 }
 
 \newbibmacro{level}{%
@@ -249,16 +250,21 @@
   }%
 }
 
-\newbibmacro*{range-date}{%
+% macro for long and short dates
+\newbibmacro*{range-date}[1][short]{%
+\begingroup%
+  \ifstrequal{#1}{short}%
+    {\let\mkrangedate\mkbibcvdateshort}%
+    {\let\mkrangedate\mkbibcvdatelong}%
   \iffieldundef{year}%
   {}%
   {\printtext{%
     % If the item is in the same year,
     \iffieldsequal{year}{endyear}%
       % compress
-      {\mkbibcvdateshort{}{month}{}}%
+      {\mkrangedate{}{month}{}}%
       % else, print the date
-      {\mkbibcvdateshort{year}{month}{}}%
+      {\mkrangedate{year}{month}{}}%
     \iffieldundef{endyear}%
       {}%
       {% check if we have a single year
@@ -278,24 +284,43 @@
             \fi%
           }%
           % else, print a range
-          {\mkbibcvdateshort{endyear}{endmonth}{}}%
+          {\mkrangedate{endyear}{endmonth}{}}%
       }%
     }%
   }%
+\endgroup%
 }
 
 \newcommand*{\datesep}{~}
-% taken from biblatex/lbx/<anylanguage>.lbx
-\protected\def\mkbibcvdateshort#1#2#3{%
+% taken from biblatex/lbx/english.lbx
+\protected\def\mkbibcvdatelong#1#2#3{%
+  \iffieldundef{#2}
+    {}
+    {\mkbibmonth{\thefield{#2}}%
+     \iffieldundef{#3}
+       {\iffieldundef{#1}{}{\space}}
+       {\nobreakspace}}%
   \iffieldundef{#3}
-  {}%
-  {\mkyearzeros{\thefield{#3}}%
-    \iffieldundef{#2}{}{\datesep}}%
-  \iffieldundef{#2}%
-  {}%
-  {\mkmonthzeros{\thefield{#2}}%
-    \iffieldundef{#1}{}{\datesep}}%
-  \iffieldbibstring{#1}{\bibstring{\thefield{#1}}}{\mkdayzeros{\thefield{#1}}}}%
+    {}
+    {\stripzeros{\thefield{#3}}%
+     \iffieldundef{#1}{}{,\space}}%
+   \iffieldbibstring{#1}
+     {\bibstring{\thefield{#1}}}
+     {\dateeraprintpre{#1}\stripzeros{\thefield{#1}}}}%
+\protected\def\mkbibcvdateshort#1#2#3{%
+  \iffieldundef{#2}
+    {}
+    {\mkmonthzeros{\thefield{#2}}%
+     \iffieldundef{#3}
+       {\iffieldundef{#1}{}{\datesep}}
+       {/}}%
+  \iffieldundef{#3}
+    {}
+    {\mkdayzeros{\thefield{#3}}%
+     \iffieldundef{#1}{}{\datesep}}%
+   \iffieldbibstring{#1}
+     {\bibstring{\thefield{#1}}}
+     {\dateeraprintpre{#1}\mkyearzeros{\thefield{#1}}}}%
 
 \newbibmacro{description}{%
   \printtext[details]{%
