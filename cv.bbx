@@ -263,9 +263,9 @@
     % If the item is in the same year,
     \iffieldsequal{year}{endyear}%
       % compress
-      {\mkrangedate{}{month}{}}%
+      {\mkrangedate{}{month}{day}}%
       % else, print the date
-      {\mkrangedate{year}{month}{}}%
+      {\mkrangedate{year}{month}{day}}%
     \iffieldundef{endyear}%
       {}%
       {% check if we have a single year
@@ -285,7 +285,7 @@
             \fi%
           }%
           % else, print a range
-          {\mkrangedate{endyear}{endmonth}{}}%
+          {\mkrangedate{endyear}{endmonth}{endday}}%
       }%
     }%
   }%
