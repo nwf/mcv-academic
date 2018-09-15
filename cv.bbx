@@ -98,6 +98,30 @@
 
 \DeclareBibliographyAlias{cvmisc}{cventry}
 
+\DeclareBibliographyDriver{presentation}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \ifnameundef{author}%
+    % if no author is given, print only the role
+    {\printmlfield{role}\newunit}%
+    {% else, print the author and the role in parenthesis, if the latter exists
+      \usebibmacro{author}
+      \ifmlfieldundef{role}{}%
+      {\mkbibparens{\printmlfield{role}}}%
+      \newunit%
+    }%
+  \printmlfield{title}%
+  \newunit%
+  \usebibmacro{funding-project}%
+  \setunit*{\addspace}%
+  \usebibmacro{period}%
+  \newunit%
+  \usebibmacro{projdate}%
+  \newunit%
+  \usebibmacro{note}% 
+  \usebibmacro{finentry}%
+}
+
 %-------------------------------------------------------------------------------
 % Formats
 %-------------------------------------------------------------------------------
