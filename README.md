@@ -188,12 +188,12 @@ The style defines the following entries (or types of data)
   * `description`: general description of the course.  This field is a string.
 
   **Presentation**. A presentation that you gave or participated in, such as a talk, keynote speech, or panel. It supports the following fields
-  * `author`: the author(s) of the presentation. 
+  * `author`: the author(s) of the presentation. This field is a string.
   * `role`: your role in the presentation. This field is a string or a `bibstring`. 
   * `title`: the title of the presentation. This field is a string.
   * `date`: the date of the presentation. This field corresponds to the BibLaTeX date field.
-  * `eventitle`: the title of the event you presented at.
-  * `location`: the location of the presentation.
+  * `eventitle`: the title of the event you presented at. This field is a string.
+  * `location`: the location of the presentation. This field is a string.
   * `note`: a small note to place at the end in parenthesis.  This field is a string.
   
 - **CVMisc**.  Refers to general things that can be placed in the CV.  For example, memberships, or items that need a short description and dates.  It supports the following fields
