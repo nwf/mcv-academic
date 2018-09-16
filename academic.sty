@@ -211,6 +211,8 @@
 
 % Patch endyears that are not declared
 % http://tex.stackexchange.com/a/327884/7561
+% Leave presentation out of this, because it uses \printdate. 
+% Patching endyear for presentation results in single dates (YYYY-MM-DD) to appear as Oct 4-4, 2010.
 \DeclareSourcemap{
   \maps[datatype=bibtex]{
     \map{
@@ -375,6 +377,7 @@
 \defprint{thesis}{theses}
 \defprint[resetnumbers=true]{project}{projects}
 \defprint{cvmisc}{cvmiscs}
+\defprint[resetnumbers=true]{presentation}{presentations}
 
 %-------------------------------------------------------------------------------
 % Patching moderncv
