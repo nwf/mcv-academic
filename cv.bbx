@@ -110,12 +110,15 @@
       {\mkbibparens{\printmlfield{role}}}%
       \newunit%
     }%
+  \newunit%
   \printmlfield{title}%
   \newunit%
-  \usebibmacro{funding-project}%
+  \printmlfield{eventtitle}%
+  \newunit%
+  \printmlfield{location}%
   \setunit*{\addspace}%
   \newunit%
-  \usebibmacro{range-date}%
+  \printdate%
   \newunit%
   \usebibmacro{note}% 
   \usebibmacro{finentry}%
@@ -175,6 +178,8 @@
   #1\isdot%
   \usebibmacro{list:andothers}%
 }
+
+\DeclareFieldFormat[presentation]{role}{\mkbibbold{\usebibmacro{field-bibstring}{#1}}}
 
 \DeclareFieldFormat[cvmisc]{title}{#1}
 

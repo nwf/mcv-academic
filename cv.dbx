@@ -1,6 +1,6 @@
 \ProvidesFile{cv.dbx}
 
-\DeclareLocalizedDatamodelFields[type=field, datatype=literal]{level, period, title, organization, country, description, funding, role, note, type, eventtitle, location}
+\DeclareLocalizedDatamodelFields[type=field, datatype=literal]{level, period, title, organization, country, description, funding, role, note, eventtitle, location}
 
 \DeclareDatamodelFields[type=list, datatype=literal]{
   number%
@@ -20,7 +20,7 @@
 \DeclareDatamodelFields[type=list, datatype=literal]{dates}
 
 % Entries
-\DeclareDatamodelEntrytypes{course, cvmisc, position, project, study, thesis}
+\DeclareDatamodelEntrytypes{course, cvmisc, position, project, study, thesis, presentation}
 
 % Data models
 \DeclareLocalizedDatamodelEntryfields[course]{%
@@ -82,7 +82,6 @@
 \DeclareLocalizedDatamodelEntryfields[presentation]{%
   author,%
   role,%
-  type,%
   title,%
   eventtitle,%
   location,%
