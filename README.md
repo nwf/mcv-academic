@@ -339,6 +339,7 @@ The entries are printed using the `\printbibliography` macro provided by [`bibla
 * `\printprojects`
 * `\printcourses`
 * `\printtheses`
+* `\printpresentations`
 * `\printcvmiscs`
 
 Note that all these macros support the same options as `\printbibliography`.
