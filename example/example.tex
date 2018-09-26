@@ -1,145 +1,138 @@
 % !BIB program = biber
 \documentclass[12pt,a4paper]{moderncv}   % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')
 
-  \usepackage[utf8]{inputenc}
-  \usepackage[english, portuguese, spanish.lcroman.tabla.noquoting.noshorthands.notilde]{babel}
-  \usepackage[spanish=mexican]{csquotes}
-  
-  % moderncv themes
-  % I use this for automatic creation of the cv
-  % default options passed outside of the cv, generally through the Makefile
-  \ifdef{\defaultstyle}%
-  {}{%
-    % options by hand
-    \def\defaultstyle{academic}
+\usepackage[utf8]{inputenc}
+\usepackage[english, portuguese, spanish.lcroman.tabla.noquoting.noshorthands.notilde]{babel}
+\usepackage[spanish=mexican]{csquotes}
+
+% moderncv themes
+% I use this for automatic creation of the cv
+% default options passed outside of the cv, generally through the Makefile
+\ifdef{\defaultstyle}%
+{}{%
+  % options by hand
+  \def\defaultstyle{academic}
+}
+\ifdef{\defaultdetails}%
+{}{%
+  % options by hand
+  \def\defaultdetails{true}
+}
+\ifdef{\defaultopts}%
+% default options passed outside of the cv, generally through the Makefile
+{}{%
+  % options by hand
+  \def\defaultopts{%
+    \selectlanguage{english}
+%    \selectshortlanguage{pt}%
   }
-  \ifdef{\defaultdetails}%
-  {}{%
-    % options by hand
-    \def\defaultdetails{true}
-  }
-  \ifdef{\defaultopts}%
-  % default options passed outside of the cv, generally through the Makefile
-  {}{%
-    % options by hand
-    \def\defaultopts{%
-      \selectlanguage{english}
-  %    \selectshortlanguage{pt}%
-    }
-  }
-  
-  %\usepackage[style=classic, details]{academic}
-  %\usepackage[style=oldstyle, details]{academic}
-  %\usepackage[style=fancy, details]{academic}
-  %\usepackage[style=banking, details]{academic}
-  %\usepackage[style=casual, details]{academic}
-  %\usepackage[style=academic, details]{academic}
-  %\usepackage[style=friggeri , details]{academic}
-  \usepackage[style=\defaultstyle, details=\defaultdetails]{academic}
-  
-  % color options 'blue' (default), 'orange', 'green', 'red', 'purple', 'grey' and 'black'
-  \moderncvcolor{grey}
-  \moderncvicons{fa-academic}
-  
-  %\renewcommand{\familydefault}{\sfdefault}    % to set the default font; use '\sfdefault' for the default sans serif font, '\rmdefault' for the default roman one, or any tex font name
-  %\nopagenumbers{}                             % uncomment to suppress automatic page numbering for CVs longer than one page
-  
-  \usepackage{geometry}
-  \geometry{margin=2cm}
-  
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  % personal data
-  \firstname{John}
-  \familyname{Doe}
-  \title{Curriculum Vit\ae} % optional
-  
-  \address{Fake Street 42}{}{Fakeland, FKL}
-  
-  \email{johndoe@fake.com}
-  \mobile{(+1) 234 5678 } % optional
-  %\phone{+2~(345)~678~901} % optional
-  %\fax{+3~(456)~789~012} % optional
-  
-  \homepage{johndoe.com/\textasciitilde joe}% note that the tilde (~) needs to be escaped for moderncv 
-  \social[scholar]{ABC123}
-  %\photo[64pt][0.4pt]{picture} % optional; '64pt' is the height the picture must be resized to, 0.4pt is the thickness of the frame around it (put it to 0pt for no frame) and 'picture' is the name of the picture file
-  %\quote{Some quote} % optional
-  
-  
-  \addbibresource{cvdata.bib}
-  
-  % If you want to make your name bold in the publications or other entries where you are an author
-  % Use a coma-separated-value list for example: 
-  %   \addboldnames{{John Doe},{J. Doe}}
-  % However, for compound family names, it is better to use the format "family-name, given-name" as:
-  %   \addboldnames{{Compound Doe, Joe},{Compound Doe, J.},{Doe, J.}}
-  % This version requires you to explicitly give all the configurations of the name you want to bold
-  \addboldnames{{John Doe},{J. Doe}}
-  
-  
-  %----------------------------------------------------------------------------------
-  %            headers
-  %----------------------------------------------------------------------------------
-  % We can define the headers in multiple languages and then using the macro
-  % These definitions can be inside the body too
-  \newmlcommand[english=Education, spanish=Educación, portuguese=Educação]{\education}
-  \newmlcommand[english=Degrees, spanish={Grados Académicos}, portuguese={Graus Acadêmicos}]{\degrees}
-  \newmlcommand[english=Technical, spanish={Estudios Técnicos}, portuguese={Estudos Técnicos}]{\technical}
-  \newmlcommand[english={Employment History}, spanish={Historial de Empleo}, portuguese={Emprego Histórico}]{\employment}
-  \newmlcommand[english={Academic}, spanish={Académia}, portuguese={Academia}]{\academic}
-  \newmlcommand[english={Teaching Experience}, spanish={Experiencia Docente}, portuguese={Experiência Docente}]{\teaching}
-  \newmlcommand[english={Courses Taught}, spanish={Cursos Impartidos}, portuguese={Disciplinas Ministradas}]{\courses}
-  \newmlcommand[english={Guided Theses}, spanish={Tésis Guiadas}, portuguese={Teses Orientadas}]{\theses}
-  \newmlcommand[english={Funding}, spanish={Proyectos de Investigación}, portuguese={Projetos de Pesquisa}]{\funding}
-  \newmlcommand[english={Grants}, spanish={Fondos de Investigación}, portuguese={Fundos de Pesquisa}]{\grants}
-  \newmlcommand[english={Publications}, spanish={Publicaciones}, portuguese={Publicações}]{\publications}
-  \newmlcommand[english={Journals}, spanish={Revistas}, portuguese={Revistas}]{\journals}
-  \newmlcommand[english={Other Appointments}, spanish={Otros Cargos}, portuguese={Outras Nomeações}]{\appointments}
-  \newmlcommand[english={Memberships}, spanish={Membresias}, portuguese={Sociedades}]{\memberships}
-  \newmlcommand[english={Presentations}, spanish={Presentaciones}, portuguese={Apresentações}]{\presentations}
-  \newmlcommand[english={International}, spanish={Internacional}, portuguese={
-  internacional}]{\international}
-  
-  %----------------------------------------------------------------------------------
-  %            content
-  %----------------------------------------------------------------------------------
-  \begin{document}
-  % I use this for automatic creation of the cv
-  \defaultopts
-  
-  % Print the header
-  \makecvtitle
-  
-  \section{\education}
-  \printstudies[heading=subbibliography, title={\degrees}, keyword=degrees]
-  
-  \printstudies[heading=subbibliography, title={\technical}, keyword=tech]
-  
-  \section{\employment}
-  \printpositions[heading=subbibliography, title={\academic}]
-  
-  \section{\teaching}
-  \printcourses[heading=subbibliography, title={\courses}]
-  
-  \printtheses[heading=subbibliography, title={\theses}]
-  
-  \section{\funding}
-  % We can hook \newrefcontext to pass options to the individual print.
-  \newrefcontext[labelprefix=A]
-  \printprojects[heading=subbibliography, title={\grants}, resetnumbers=true]
-  % However note that we need to reset the context
-  % Test by commenting the next macro and see what happens to the Publications entries
-  \newrefcontext[]
-  
-  \section{\publications}
-  % Notice that you can apply other parameters, like resetnumbers to the printblibliography and other statements
-  \printbibliography[type=article, heading=subbibliography,title={\journals}, resetnumbers=true]
-  
-  \section{\presentations}
-  \printpresentations[heading=subbibliography,title={\international}, resetnumbers=true, keyword=international]
-  
-  \section{\appointments}
-  \printcvmiscs[heading=subbibliography, title={\memberships}, keyword=mem]
-  
-  \end{document}
-  
+}
+
+% Available styles: classic, oldstyle, fancy, banking, casual, academic, friggeri
+\usepackage[style=\defaultstyle, details=\defaultdetails]{academic}
+
+% Availabel colors: 'blue' (default), 'orange', 'green', 'red', 'purple', 'grey' and 'black'
+\moderncvcolor{grey}
+\moderncvicons{fa-academic}
+
+%\renewcommand{\familydefault}{\sfdefault}    % to set the default font; use '\sfdefault' for the default sans serif font, '\rmdefault' for the default roman one, or any tex font name
+%\nopagenumbers{}                             % uncomment to suppress automatic page numbering for CVs longer than one page
+
+\usepackage{geometry}
+\geometry{margin=2cm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% personal data
+\firstname{John}
+\familyname{Doe}
+\title{Curriculum Vit\ae} % optional
+
+\address{Fake Street 42}{}{Fakeland, FKL}
+
+\email{johndoe@fake.com}
+\mobile{(+1) 234 5678 } % optional
+%\phone{+2~(345)~678~901} % optional
+%\fax{+3~(456)~789~012} % optional
+
+\homepage{johndoe.com/\textasciitilde joe}% note that the tilde (~) needs to be escaped for moderncv 
+\social[scholar]{ABC123}
+%\photo[64pt][0.4pt]{picture} % optional; '64pt' is the height the picture must be resized to, 0.4pt is the thickness of the frame around it (put it to 0pt for no frame) and 'picture' is the name of the picture file
+%\quote{Some quote} % optional
+
+
+\addbibresource{cvdata.bib}
+
+% If you want to make your name bold in the publications or other entries where you are an author
+% Use a coma-separated-value list for example: 
+%   \addboldnames{{John Doe},{J. Doe}}
+% However, for compound family names, it is better to use the format "family-name, given-name" as:
+%   \addboldnames{{Compound Doe, Joe},{Compound Doe, J.},{Doe, J.}}
+% This version requires you to explicitly give all the configurations of the name you want to bold
+\addboldnames{{John Doe},{J. Doe}}
+
+
+%----------------------------------------------------------------------------------
+%            headers
+%----------------------------------------------------------------------------------
+% We can define the headers in multiple languages and then using the macro
+% These definitions can be inside the body too
+\newmlcommand[english=Education, spanish=Educación, portuguese=Educação]{\education}
+\newmlcommand[english=Degrees, spanish={Grados Académicos}, portuguese={Graus Acadêmicos}]{\degrees}
+\newmlcommand[english=Technical, spanish={Estudios Técnicos}, portuguese={Estudos Técnicos}]{\technical}
+\newmlcommand[english={Employment History}, spanish={Historial de Empleo}, portuguese={Emprego Histórico}]{\employment}
+\newmlcommand[english={Academic}, spanish={Académia}, portuguese={Academia}]{\academic}
+\newmlcommand[english={Teaching Experience}, spanish={Experiencia Docente}, portuguese={Experiência Docente}]{\teaching}
+\newmlcommand[english={Courses Taught}, spanish={Cursos Impartidos}, portuguese={Disciplinas Ministradas}]{\courses}
+\newmlcommand[english={Guided Theses}, spanish={Tésis Guiadas}, portuguese={Teses Orientadas}]{\theses}
+\newmlcommand[english={Funding}, spanish={Proyectos de Investigación}, portuguese={Projetos de Pesquisa}]{\funding}
+\newmlcommand[english={Grants}, spanish={Fondos de Investigación}, portuguese={Fundos de Pesquisa}]{\grants}
+\newmlcommand[english={Publications}, spanish={Publicaciones}, portuguese={Publicações}]{\publications}
+\newmlcommand[english={Journals}, spanish={Revistas}, portuguese={Revistas}]{\journals}
+\newmlcommand[english={Other Appointments}, spanish={Otros Cargos}, portuguese={Outras Nomeações}]{\appointments}
+\newmlcommand[english={Memberships}, spanish={Membresias}, portuguese={Sociedades}]{\memberships}
+\newmlcommand[english={Presentations}, spanish={Presentaciones}, portuguese={Apresentações}]{\presentations}
+\newmlcommand[english={International}, spanish={Internacional}, portuguese={
+internacional}]{\international}
+
+%----------------------------------------------------------------------------------
+%            content
+%----------------------------------------------------------------------------------
+\begin{document}
+% I use this for automatic creation of the cv
+\defaultopts
+
+% Print the header
+\makecvtitle
+
+\section{\education}
+\printstudies[heading=subbibliography, title={\degrees}, keyword=degrees]
+
+\printstudies[heading=subbibliography, title={\technical}, keyword=tech]
+
+\section{\employment}
+\printpositions[heading=subbibliography, title={\academic}]
+
+\section{\teaching}
+\printcourses[heading=subbibliography, title={\courses}]
+
+\printtheses[heading=subbibliography, title={\theses}]
+
+\section{\funding}
+% We can hook \newrefcontext to pass options to the individual print.
+\newrefcontext[labelprefix=A]
+\printprojects[heading=subbibliography, title={\grants}, resetnumbers=true]
+% However note that we need to reset the context
+% Test by commenting the next macro and see what happens to the Publications entries
+\newrefcontext[]
+
+\section{\publications}
+% Notice that you can apply other parameters, like resetnumbers to the printblibliography and other statements
+\printbibliography[type=article, heading=subbibliography,title={\journals}, resetnumbers=true]
+
+\section{\presentations}
+\printpresentations[heading=subbibliography,title={\international}, resetnumbers=true, keyword=international]
+
+\section{\appointments}
+\printcvmiscs[heading=subbibliography, title={\memberships}, keyword=mem]
+
+\end{document}
