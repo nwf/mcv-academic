@@ -186,6 +186,15 @@ The style defines the following entries (or types of data)
   * `dates`: alternatively, the course may have a set of dates that can be specified with this field instead.  It is a list of date separated by the keyword `and` (like authors in the standard bibtex), and each date follows the same pattern of `study`.  If a `date` is defined, it will take precedence over `dates`.
   * `organization`: the institution where the course was taught.  This field is a string.
   * `description`: general description of the course.  This field is a string.
+
+  **Presentation**. A presentation that you gave or participated in, such as a talk, keynote speech, or panel. It supports the following fields
+  * `author`: the author(s) of the presentation. This field is a string.
+  * `role`: your role in the presentation. This field is a string or a `bibstring`. 
+  * `title`: the title of the presentation. This field is a string.
+  * `date`: the date of the presentation. This field corresponds to the BibLaTeX date field.
+  * `eventitle`: the title of the event you presented at. This field is a string.
+  * `location`: the location of the presentation. This field is a string.
+  * `note`: a small note to place at the end in parenthesis.  This field is a string.
   
 - **CVMisc**.  Refers to general things that can be placed in the CV.  For example, memberships, or items that need a short description and dates.  It supports the following fields
   * `title`: a principal description of the entry.  This field is a string.
@@ -330,6 +339,7 @@ The entries are printed using the `\printbibliography` macro provided by [`bibla
 * `\printprojects`
 * `\printcourses`
 * `\printtheses`
+* `\printpresentations`
 * `\printcvmiscs`
 
 Note that all these macros support the same options as `\printbibliography`.

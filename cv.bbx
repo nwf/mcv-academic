@@ -98,6 +98,32 @@
 
 \DeclareBibliographyAlias{cvmisc}{cventry}
 
+\DeclareBibliographyDriver{presentation}{%
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \ifnameundef{author}%
+    % if no author is given, print only the role
+    {\printmlfield{role}\newunit}%
+    {% else, print the author and the role in parenthesis, if the latter exists
+      \usebibmacro{author}
+      \ifmlfieldundef{role}{}%
+      {\mkbibparens{\printmlfield{role}}}%
+      \newunit%
+    }%
+  \newunit%
+  \printmlfield{title}%
+  \newunit%
+  \printmlfield{eventtitle}%
+  \newunit%
+  \printmlfield{location}%
+  \setunit*{\addspace}%
+  \newunit%
+  \printdate%
+  \newunit%
+  \usebibmacro{note}% 
+  \usebibmacro{finentry}%
+}
+
 %-------------------------------------------------------------------------------
 % Formats
 %-------------------------------------------------------------------------------
@@ -152,6 +178,8 @@
   #1\isdot%
   \usebibmacro{list:andothers}%
 }
+
+\DeclareFieldFormat[presentation]{role}{\mkbibbold{\usebibmacro{field-bibstring}{#1}}}
 
 \DeclareFieldFormat[cvmisc]{title}{#1}
 
