@@ -291,65 +291,109 @@
     % If the item is in the same year,
     \iffieldsequal{year}{endyear}%
       % compress
-      {\mkrangedate{}{month}{day}}%
+      {%
+        \iffieldsequal{month}{endmonth}%
+        {%
+          \iffieldsequal{day}{endday}%
+            % just one date, print it
+            {\mkrangedate{year}{month}{day}}%
+            % we are going to print a range date
+            {%
+            \ifstrequal{#1}{short}%
+              % if short then print day only, so we have dd-DD MM YYYY
+              {\mkrangedate{}{}{day}}%
+              % if long, then print moth first, so we have MMM dd-DD, YYYY
+              {\mkrangedate{}{month}{day}}%
+            }%
+        }%
+        % print only the day
+        {\mkrangedate{}{month}{day}}%
+      }%
       % else, print the date
       {\mkrangedate{year}{month}{day}}%
+    % In theory the endyear will never be undef, but better to check 
     \iffieldundef{endyear}%
       {}%
-      {% check if we have a single year
-        \ifthenelse{ \(
-           \iffieldsequal{year}{endyear} \and
-           \iffieldundef{month}
-          \) }%
-          {}%
-          {\bibdatedash}%
-        % if a range is given but blank,
-        \iffieldequalstr{endyear}{}%
-          % default to "present"
-          {\ifdetails% print long version (we may have room, unless there is no description)
-              \ifmlfieldundef{description}{\bibsstring{present}}{\bibstring{present}}%
-            \else% print short version
-              \bibsstring{present}%
-            \fi%
+      {% Check date range
+        \iffieldsequal{year}{endyear}%
+        {%
+          \iffieldsequal{month}{endmonth}%
+          {%
+            \iffieldsequal{day}{endday}%
+            {}% do nothing, already printed
+            {%
+            \ifstrequal{#1}{short}%
+              % print the rest of the date
+              {\bibdatedash\mkrangedate[month day sep={~}]{year}{month}{endday}}%
+              {\bibdatedash\mkrangedate{year}{}{}}%
+            }%
           }%
-          % else, print a range
-          {\mkrangedate{endyear}{endmonth}{endday}}%
+          {%
+            % if there is no month, do not print the range
+            \iffieldundef{month}{}{\bibdatedash}%
+            \mkrangedate[year month sep={~}]{year}{endmonth}{endday}}%
+        }%
+        {\bibdatedash%
+        % if a range is given but blank,
+          \iffieldequalstr{endyear}{}%
+            % default to "present"
+            {\ifdetails% print long version (we may have room, unless there is no description)
+                \ifmlfieldundef{description}{\bibsstring{present}}{\bibstring{present}}%
+              \else% print short version
+                \bibsstring{present}%
+              \fi%
+            }%
+            % else, print a range
+            {\mkrangedate{endyear}{endmonth}{endday}}%
+          }%
       }%
     }%
   }%
 \endgroup%
 }
 
-\newcommand*{\datesep}{~}
+\newcommand*{\datesep}{.}
 % taken from biblatex/lbx/english.lbx
-\protected\def\mkbibcvdatelong#1#2#3{%
-  \iffieldundef{#2}
+\protect\newcommand{\mkbibcvdatelong}[4][]{%
+  \iffieldundef{#3}
     {}
-    {\mkbibmonth{\thefield{#2}}%
-     \iffieldundef{#3}
-       {\iffieldundef{#1}{}{\space}}
+    {\mkbibmonth{\thefield{#3}}%
+     \iffieldundef{#4}
+       {\iffieldundef{#2}{}{\space}}
        {\nobreakspace}}%
-  \iffieldundef{#3}
+  \iffieldundef{#4}
     {}
-    {\stripzeros{\thefield{#3}}%
-     \iffieldundef{#1}{}{,\space}}%
-   \iffieldbibstring{#1}
-     {\bibstring{\thefield{#1}}}
-     {\dateeraprintpre{#1}\stripzeros{\thefield{#1}}}}%
-\protected\def\mkbibcvdateshort#1#2#3{%
-  \iffieldundef{#2}
-    {}
-    {\mkmonthzeros{\thefield{#2}}%
-     \iffieldundef{#3}
-       {\iffieldundef{#1}{}{\datesep}}
-       {/}}%
-  \iffieldundef{#3}
-    {}
-    {\mkdayzeros{\thefield{#3}}%
-     \iffieldundef{#1}{}{\datesep}}%
-   \iffieldbibstring{#1}
-     {\bibstring{\thefield{#1}}}
-     {\dateeraprintpre{#1}\mkyearzeros{\thefield{#1}}}}%
+    {\stripzeros{\thefield{#4}}%
+     \iffieldundef{#2}{}{,\space}}%
+   \iffieldbibstring{#2}
+     {\bibstring{\thefield{#2}}}
+     {\dateeraprintpre{#2}\stripzeros{\thefield{#2}}}%
+}%
+   
+\pgfkeys{
+/dateshort/.is family, /dateshort/.cd,
+year month sep/.store in=\@ymsep,
+year month sep/.default={\datesep},
+month day sep/.store in=\@mdsep,
+month day sep/.default={\datesep},
+}
+\protect\newcommand{\mkbibcvdateshort}[4][]{%
+  \pgfkeys{/dateshort/.cd, year month sep, month day sep,#1}%
+  % print format DD MM YYYY, instead
+  \iffieldundef{#4}%
+    {}%
+    {\mkdayzeros{\thefield{#4}}%
+     \iffieldundef{#3}{}{\@mdsep}}%
+  \iffieldundef{#3}%
+    {}%
+    {\mkmonthzeros{\thefield{#3}}%
+     \iffieldundef{#2}{}{\@ymsep}}%
+  \iffieldundef{#2}%
+    {}%
+    {\iffieldbibstring{#2}%
+      {\bibstring{\thefield{#2}}}%
+      {\dateeraprintpre{#2}\mkyearzeros{\thefield{#2}}}}%
+}
 
 \newbibmacro{description}{%
   \printtext[details]{%
