@@ -5,6 +5,7 @@
 {\RequireBibliographyStyle{\biblatexmultipledm@bibstyle}}
 {\RequireBibliographyStyle{numeric-comp}}
 
+
 % Create short names for languages
 \RequirePackage{pgfkeys}
 
@@ -43,12 +44,8 @@
   \usebibmacro{begentry}%
   \usebibmacro{cvitem}%
   {% print the date or the list-of-dates
-    \iffieldundef{year}{%
-      \printlist{dates}%
-    }{%
-      \usebibmacro{range-date}%
-    }%
-  }
+    \usebibmacro{dates}%
+  }%
   {%
     \ifnameundef{author}{}{\usebibmacro{author}\newunit}%
     \printmlfield{title}%
@@ -136,9 +133,10 @@
 
 \DeclareListFormat{dates}{%
   \usebibmacro{string-to-date}{#1}%
-  \ifthenelse{\value{listcount}<\value{liststop}}
-    {\addcomma\space}
-    {}
+  \ifthenelse{\value{listcount}<\value{liststop}}%
+    {\addcomma\space}%
+    {}%
+  \usebibmacro{list:andothers}%
 }
 
 % Specific
@@ -239,6 +237,14 @@
 \newbibmacro*{cvfinentry}{}
 
 % Common formats
+\newbibmacro*{dates}[1][-\value{listtotal}]{%
+  \iffieldundef{year}{%
+    \printlist[dates][#1]{dates}%
+  }{%
+    \usebibmacro{range-date}%
+  }%
+}
+
 % Does the same thing as range-date but with a string instead
 \newbibmacro*{string-to-date}[1]{%
   % localize the year macrso to avoid problems
@@ -256,6 +262,7 @@
   }%
   {% Is single date
     \usebibmacro{string-to-single-date}{#1}%
+%    \usebibmacro{string-to-single-date}[end]{#1}%
   }%
   \usebibmacro{range-date}%
   \endgroup%
@@ -263,7 +270,7 @@
 
 \newbibmacro*{string-to-single-date}[2][]{%
   % if string (#2) is emtpy do nothing
-  \ifdefempty{#2}{}{%
+  \ifstrempty{#2}{}{%
     % else
     \IfSubStr{#2}{-}%
     {%
@@ -271,7 +278,7 @@
       \StrCut{\rest}{-}\month\day%
       \csedef{abx@field@#1year}{\year}%
       \csedef{abx@field@#1month}{\month}%
-      \csedef{abx@field@#1day}{\day}%
+      \ifdefempty{\day}{}{\csedef{abx@field@#1day}{\day}}%
     }%
     {% Just a year in the date
       \csedef{abx@field@#1year}{#2}%
@@ -354,20 +361,33 @@
 
 \newcommand*{\datesep}{.}
 % taken from biblatex/lbx/english.lbx
+% [opts]{year}{month}{day}
 \protect\newcommand{\mkbibcvdatelong}[4][]{%
-  \iffieldundef{#3}
-    {}
-    {\mkbibmonth{\thefield{#3}}%
-     \iffieldundef{#4}
-       {\iffieldundef{#2}{}{\space}}
-       {\nobreakspace}}%
-  \iffieldundef{#4}
-    {}
-    {\stripzeros{\thefield{#4}}%
-     \iffieldundef{#2}{}{,\space}}%
-   \iffieldbibstring{#2}
-     {\bibstring{\thefield{#2}}}
-     {\dateeraprintpre{#2}\stripzeros{\thefield{#2}}}%
+  \iffieldundef{#3}%
+    {}%
+    {%
+      \ifboolexpr{%
+        test {\IfBeginWith{\thefield{#3}}{S}}% if starts with S
+        or
+        test {\IfBeginWith{\thefield{#3}}{s}}% if starts with S
+      }
+        {\bibsstring{semester}\nobreakspace\StrGobbleLeft{\thefield{#3}}{1}}%
+        {%
+           \mkbibmonth{\thefield{#3}}%
+           \iffieldundef{#4}% is there a day?
+             {\iffieldundef{#2}{}{\space}}% there is a day, so lets check the year
+             {\nobreakspace}% there is no day
+        }%
+    }%
+  \iffieldundef{#4}%
+    {}%
+    {%
+       \stripzeros{\thefield{#4}}%
+       \iffieldundef{#2}{}{,\space}%
+    }%
+  \iffieldbibstring{#2}%
+    {\bibstring{\thefield{#2}}}%
+    {\dateeraprintpre{#2}\stripzeros{\thefield{#2}}}%
 }%
    
 \pgfkeys{
@@ -377,6 +397,7 @@ year month sep/.default={\datesep},
 month day sep/.store in=\@mdsep,
 month day sep/.default={\datesep},
 }
+% [opts]{year}{month}{day}
 \protect\newcommand{\mkbibcvdateshort}[4][]{%
   \pgfkeys{/dateshort/.cd, year month sep, month day sep,#1}%
   % print format DD MM YYYY, instead
@@ -386,8 +407,16 @@ month day sep/.default={\datesep},
      \iffieldundef{#3}{}{\@mdsep}}%
   \iffieldundef{#3}%
     {}%
-    {\mkmonthzeros{\thefield{#3}}%
-     \iffieldundef{#2}{}{\@ymsep}}%
+    {%
+      \ifboolexpr{%
+        test {\IfBeginWith{\thefield{#3}}{S}}% if starts with S
+        or
+        test {\IfBeginWith{\thefield{#3}}{s}}% if starts with S
+      }
+        {\bibsstring{semester}\StrGobbleLeft{\thefield{#3}}{1}}%
+        {\mkmonthzeros{\thefield{#3}}}%
+      \iffieldundef{#2}{}{\@ymsep}%
+    }%
   \iffieldundef{#2}%
     {}%
     {\iffieldbibstring{#2}%
