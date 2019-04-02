@@ -55,7 +55,7 @@
 \DeclareBibliographyDriver{cventry}{%
   \usebibmacro{begentry}%
   \usebibmacro{cventry}%
-  {\usebibmacro{range-date}}%
+  {\usebibmacro{dates}[-\value{liststop}]}%
   {%
     \ifnameundef{author}{}{\usebibmacro{author}\newunit}%
     \printmlfield{title}%
