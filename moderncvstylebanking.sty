@@ -65,7 +65,7 @@
 % Fix title
 \patchcmd{\makehead}% <cmd>
 {\titlestyle{~|~\@title}}% <search>
-{\titlestyle{\\\@title}}% <replace>
+{\titlestyle{\\[5pt]\@title}}% <replace>
 {}{}% <success><failure>
 
 % Update name
