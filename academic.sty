@@ -280,12 +280,18 @@
   \fi
 }
 
-\def\hlblx@bibfile@name{\jobname.bib}
+\def\hlblx@bibfile@name{\jobname-hlblx.bib}
 \newwrite\hlblx@bibfile
 \immediate\openout\hlblx@bibfile=\hlblx@bibfile@name
 
 \newcounter{hlblx@name}
 \setcounter{hlblx@name}{0}
+
+% Ensure that the generated bib file isn't empty, because that causes some
+% tools to croak.
+\immediate\write\hlblx@bibfile{%
+ @misc{hlblx-dummy, options={dataonly=true},}%
+}
 
 \newcommand*{\hlblx@writenametobib}[1]{%
   \stepcounter{hlblx@name}%
@@ -318,21 +324,12 @@
 {}
 {}
 
-\newbibmacro*{name:bold}[2]{%
-  \def\do##1{\iffieldequalstr{hash}{##1}{\bfseries\listbreak}{}}%
+\newcommand*{\hlblx@format}{\bfseries}
+\newbibmacro*{name:hlblx}[1]{%
+  \def\do##1{\iffieldequalstr{hash}{##1}{\hlblx@format\listbreak}{}}%
   \dolistloop{\hlbxl@boldhashes}%
 }
-
-\xpretobibmacro{name:family}{\begingroup\usebibmacro{name:bold}{#1}{#2}}{}{}
-\xpretobibmacro{name:given-family}{\begingroup\usebibmacro{name:bold}{#1}{#2}}{}{}
-\xpretobibmacro{name:family-given}{\begingroup\usebibmacro{name:bold}{#1}{#2}}{}{}
-\xpretobibmacro{name:delim}{\begingroup\normalfont}{}{}
-
-\xapptobibmacro{name:family}{\endgroup}{}{}
-\xapptobibmacro{name:given-family}{\endgroup}{}{}
-\xapptobibmacro{name:family-given}{\endgroup}{}{}
-\xapptobibmacro{name:delim}{\endgroup}{}{}
-
+\xpretobibmacro{name:hook}{\usebibmacro{name:hlblx}{#1}}{}{}
 
 % User macros
 \newcommand*{\addboldnames}{\forcsvlist\hlblx@writenametobib}
