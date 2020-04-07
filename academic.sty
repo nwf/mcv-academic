@@ -37,7 +37,7 @@
   style/.store in=\@load@style,
   style/.default=academic,
   %
-  % unknown keys are assumed to be options to be passed to the amc package
+  % unknown keys are assumed to be options to be passed to the biblatex package
   .unknown/.code={\edef\unknown@packageoptions{\unknown@packageoptions,\pgfkeyscurrentname=#1}},
 }
 
@@ -53,7 +53,7 @@
 \ProcessPgfPackageOptions{/academic}
 \ifdefempty{\unknown@packageoptions}%
   {}%
-  {\PackageWarning{academic}{Unknown options: '\unknown@packageoptions'}}
+  {\PackageWarning{academic}{Unknown options that I will pass to biblatex: '\unknown@packageoptions'}}
 
 
 %https://tex.stackexchange.com/a/131413/7561
@@ -202,7 +202,7 @@
 }
 
 
-\RequirePackage[backend=biber, citestyle=numeric-comp, bibstyle=\@load@bibstyle, datamodel=\@load@datamodel, sorting=ymdtn, maxbibnames=99, maxitems=3, defernumbers=true, giveninits=true, sortcites]{biblatex}
+\RequirePackage[backend=biber, citestyle=numeric-comp, bibstyle=\@load@bibstyle, datamodel=\@load@datamodel, sorting=ymdtn, maxbibnames=99, maxitems=3, defernumbers=true, giveninits=true, sortcites, \unknown@packageoptions]{biblatex}
 
 
 % Execute mappings (these must be after biblatex loaded, since we will use the \DeclareLangaugeMapping macro)
