@@ -27,7 +27,7 @@
 \DeclareBibliographyDriver{cventry}{%
   \usebibmacro{begentry}%
   \usebibmacro{cventry}%
-  {\usebibmacro{dates}[-\value{liststop}]}%
+  {\usebibmacro{dates}[-\value{maxyears}]}%
   {%
     \ifnameundef{author}{}{\usebibmacro{author}\newunitpunct}%
     \printmlfield{title}%

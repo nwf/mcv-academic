@@ -10,9 +10,13 @@
 % Definitions
 %-------------------------------------------------------------------------------
 
-%switches for information
+%% Switches for information
 \newif\ifdetails\detailsfalse
 \newif\if@citeall
+
+%% Counters
+% count the list of years on the dates
+\newcounter{maxyears}
 
 %-------------------------------------------------------------------------------
 % Options
@@ -37,6 +41,8 @@
   style/.store in=\@load@style,
   style/.default=academic,
   %
+  maxyears/.code={\setcounter{maxyears}{#1}},
+  %
   % unknown keys are assumed to be options to be passed to the biblatex package
   .unknown/.code={\edef\unknown@packageoptions{\unknown@packageoptions,\pgfkeyscurrentname=#1}},
 }
@@ -47,6 +53,7 @@
   % put defaults here
   citeall,
   details = false,
+  maxyears = 3,
 }
 
 % process options key-value
