@@ -312,11 +312,11 @@
 
 \addbibresource{\hlblx@bibfile@name}
 
-\newcommand*{\hlbxl@boldhashes}{}
+\newcommand*{\hlbxl@processhashes}{}
 \DeclareNameFormat{hlblx@hashextract}{%
-  \xifinlist{\thefield{hash}}{\hlbxl@boldhashes}
+  \xifinlist{\thefield{hash}}{\hlbxl@processhashes}
   {}
-  {\listxadd{\hlbxl@boldhashes}{\thefield{fullhash}}}}
+  {\listxadd{\hlbxl@processhashes}{\thefield{fullhash}}}}
 
 \DeclareCiteCommand{\hlblx@getmethehash}
 {}
@@ -324,16 +324,19 @@
 {}
 {}
 
-\newcommand*{\hlblx@format}{\bfseries}
+% internal use
+\newcommand{\hlblx@format}{\bfseries}
+% user interface
+\newcommand{\hlformat}[1]{\renewcommand\hlblx@format{#1}}
 \newbibmacro*{name:hlblx}[1]{%
   \def\do##1{\iffieldequalstr{hash}{##1}{\hlblx@format\listbreak}{}}%
-  \dolistloop{\hlbxl@boldhashes}%
+  \dolistloop{\hlbxl@processhashes}%
 }
 \xpretobibmacro{name:hook}{\usebibmacro{name:hlblx}{#1}}{}{}
 
 % User macros
 \newcommand*{\addboldnames}{\forcsvlist\hlblx@writenametobib}
-\newcommand*{\resetboldnames}{\def\hlbxl@boldhashes{}}
+\newcommand*{\resetboldnames}{\def\hlbxl@processhashes{}}
 
 % Mantained for backwards compatibility
 \newcommand*{\boldname}[3]{%
