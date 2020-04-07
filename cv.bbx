@@ -43,9 +43,7 @@
 \DeclareBibliographyDriver{cventry}{%
   \usebibmacro{begentry}%
   \usebibmacro{cvitem}%
-  {% print the date or the list-of-dates
-    \usebibmacro{dates}%
-  }%
+  {\iffieldundef{hintcol}{\usebibmacro{range-date}}{\printfield{hintcol}}}%
   {%
     \ifnameundef{author}{}{\usebibmacro{author}\newunit}%
     \printmlfield{title}%
@@ -128,7 +126,7 @@
 % General
 \DeclareFieldFormat{title}{\mkbibquote{#1}}
 \DeclareFieldFormat{organization}{\mkbibemph{#1}}
-\DeclareFieldFormat{note}{\mkbibparens{#1\adddot}}
+\DeclareFieldFormat{note}{\mkbibparens{#1}}
 \DeclareFieldFormat{details}{\ifdetails\small#1\fi}
 
 \DeclareListFormat{dates}{%

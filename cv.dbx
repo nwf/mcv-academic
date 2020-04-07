@@ -6,6 +6,9 @@
   number%
 }
 
+\DeclareDatamodelEntryfields{hintcol}
+\DeclareDatamodelFields[type=field, datatype=literal]{hintcol}
+
 \DeclareDatamodelFields[type=field, datatype=datepart]{
   year,%
   endyear,%
